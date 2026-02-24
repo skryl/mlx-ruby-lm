@@ -1,0 +1,3 @@
+[submodule "mlx-lm"]
+	path = mlx-lm
+	url = https://github.com/ml-explore/mlx-lm.git
