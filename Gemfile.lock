@@ -1,6 +1,7 @@
 PATH
   remote: .
   specs:
+    mlx (0.30.7.4)
     mlx-ruby-lm (0.30.7.1)
       mlx (~> 0.1)
       safetensors (~> 0.2)
