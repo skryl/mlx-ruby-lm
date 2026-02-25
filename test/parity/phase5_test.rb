@@ -134,8 +134,11 @@ class Phase5ModelLoadingTest < Minitest::Test
     # Build safetensors format manually using Ruby
     require "json"
 
+    # Flatten nested parameter hash to flat "key.subkey" => array
+    flat_params = MLX::Utils.tree_flatten(params, destination: {})
+
     tensors = {}
-    params.each do |name, arr|
+    flat_params.each do |name, arr|
       @mx.eval(arr)
       shape = arr.shape
       dtype = arr.dtype
@@ -150,7 +153,7 @@ class Phase5ModelLoadingTest < Minitest::Test
       binary = data.pack("e*")
 
       tensors[name] = {
-        "dtype" => "F32",
+        "dtype" => "float32",
         "shape" => shape,
         "data" => binary,
       }

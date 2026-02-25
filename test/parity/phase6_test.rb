@@ -195,7 +195,7 @@ class Phase6Starcoder2Test < Minitest::Test
     model = MlxLm::Models::Starcoder2::Model.new(@args)
     block = model.layers[0]
     # Access the normalization layers
-    norm = block.instance_variable_get(:@input_layernorm)
+    norm = block.input_layernorm
     assert_instance_of MLX::NN::LayerNorm, norm, "Starcoder2 should use LayerNorm"
   end
 end

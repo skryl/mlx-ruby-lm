@@ -34,12 +34,12 @@ module MlxLm
           @scale = @head_dim**(-0.5)
 
           # Qwen2: Q, K, V have bias; O does not
-          @q_proj = MLX::NN::Linear.new(dim, @n_heads * @head_dim, bias: true)
-          @k_proj = MLX::NN::Linear.new(dim, @n_kv_heads * @head_dim, bias: true)
-          @v_proj = MLX::NN::Linear.new(dim, @n_kv_heads * @head_dim, bias: true)
-          @o_proj = MLX::NN::Linear.new(@n_heads * @head_dim, dim, bias: false)
+          self.q_proj = MLX::NN::Linear.new(dim, @n_heads * @head_dim, bias: true)
+          self.k_proj = MLX::NN::Linear.new(dim, @n_kv_heads * @head_dim, bias: true)
+          self.v_proj = MLX::NN::Linear.new(dim, @n_kv_heads * @head_dim, bias: true)
+          self.o_proj = MLX::NN::Linear.new(@n_heads * @head_dim, dim, bias: false)
 
-          @rope = MLX::NN::RoPE.new(
+          self.rope = MLX::NN::RoPE.new(
             @head_dim,
             traditional: args.rope_traditional,
             base: args.rope_theta
@@ -50,22 +50,22 @@ module MlxLm
           mx = MLX::Core
           b, l, _d = x.shape
 
-          queries = @q_proj.call(x).reshape([b, l, @n_heads, @head_dim]).transpose([0, 2, 1, 3])
-          keys = @k_proj.call(x).reshape([b, l, @n_kv_heads, @head_dim]).transpose([0, 2, 1, 3])
-          values = @v_proj.call(x).reshape([b, l, @n_kv_heads, @head_dim]).transpose([0, 2, 1, 3])
+          queries = q_proj.call(x).reshape([b, l, @n_heads, @head_dim]).transpose([0, 2, 1, 3])
+          keys = k_proj.call(x).reshape([b, l, @n_kv_heads, @head_dim]).transpose([0, 2, 1, 3])
+          values = v_proj.call(x).reshape([b, l, @n_kv_heads, @head_dim]).transpose([0, 2, 1, 3])
 
           if cache
-            queries = @rope.call(queries, offset: cache.offset)
-            keys = @rope.call(keys, offset: cache.offset)
+            queries = rope.call(queries, offset: cache.offset)
+            keys = rope.call(keys, offset: cache.offset)
             keys, values = cache.update_and_fetch(keys, values)
           else
-            queries = @rope.call(queries)
-            keys = @rope.call(keys)
+            queries = rope.call(queries)
+            keys = rope.call(keys)
           end
 
           output = mx.scaled_dot_product_attention(queries, keys, values, @scale, mask)
           output = output.transpose([0, 2, 1, 3]).reshape([b, l, @n_heads * @head_dim])
-          @o_proj.call(output)
+          o_proj.call(output)
         end
       end
 
@@ -75,56 +75,54 @@ module MlxLm
           dim = args.hidden_size
           hidden_dim = args.intermediate_size
 
-          @gate_proj = MLX::NN::Linear.new(dim, hidden_dim, bias: false)
-          @down_proj = MLX::NN::Linear.new(hidden_dim, dim, bias: false)
-          @up_proj = MLX::NN::Linear.new(dim, hidden_dim, bias: false)
+          self.gate_proj = MLX::NN::Linear.new(dim, hidden_dim, bias: false)
+          self.down_proj = MLX::NN::Linear.new(hidden_dim, dim, bias: false)
+          self.up_proj = MLX::NN::Linear.new(dim, hidden_dim, bias: false)
         end
 
         def call(x)
-          @down_proj.call(MLX::NN.silu(@gate_proj.call(x)) * @up_proj.call(x))
+          down_proj.call(MLX::NN.silu(gate_proj.call(x)) * up_proj.call(x))
         end
       end
 
       class TransformerBlock < MLX::NN::Module
         def initialize(args)
           super()
-          @self_attn = Attention.new(args)
-          @mlp = MLP.new(args)
-          @input_layernorm = MLX::NN::RMSNorm.new(args.hidden_size, eps: args.rms_norm_eps)
-          @post_attention_layernorm = MLX::NN::RMSNorm.new(args.hidden_size, eps: args.rms_norm_eps)
+          self.self_attn = Attention.new(args)
+          self.mlp = MLP.new(args)
+          self.input_layernorm = MLX::NN::RMSNorm.new(args.hidden_size, eps: args.rms_norm_eps)
+          self.post_attention_layernorm = MLX::NN::RMSNorm.new(args.hidden_size, eps: args.rms_norm_eps)
         end
 
         def call(x, mask: nil, cache: nil)
-          r = @self_attn.call(@input_layernorm.call(x), mask: mask, cache: cache)
+          r = self_attn.call(input_layernorm.call(x), mask: mask, cache: cache)
           h = x + r
-          r = @mlp.call(@post_attention_layernorm.call(h))
+          r = mlp.call(post_attention_layernorm.call(h))
           h + r
         end
       end
 
       class Qwen2Model < MLX::NN::Module
-        attr_reader :layers
-
         def initialize(args)
           super()
           @args = args
-          @embed_tokens = MLX::NN::Embedding.new(args.vocab_size, args.hidden_size)
-          @layers = Array.new(args.num_hidden_layers) { TransformerBlock.new(args) }
-          @norm = MLX::NN::RMSNorm.new(args.hidden_size, eps: args.rms_norm_eps)
+          self.embed_tokens = MLX::NN::Embedding.new(args.vocab_size, args.hidden_size)
+          self.layers = Array.new(args.num_hidden_layers) { TransformerBlock.new(args) }
+          self.norm = MLX::NN::RMSNorm.new(args.hidden_size, eps: args.rms_norm_eps)
         end
 
         def call(inputs, cache: nil)
-          h = @embed_tokens.call(inputs)
-          layer_cache = cache || [nil] * @layers.length
+          h = embed_tokens.call(inputs)
+          layer_cache = cache || [nil] * layers.length
 
           mask = nil
           mask = "causal" if h.shape[1] > 1
 
-          @layers.each_with_index do |layer, i|
+          layers.each_with_index do |layer, i|
             h = layer.call(h, mask: mask, cache: layer_cache[i])
           end
 
-          @norm.call(h)
+          norm.call(h)
         end
       end
 
@@ -132,18 +130,18 @@ module MlxLm
         def initialize(args)
           super()
           @args = args
-          @model = Qwen2Model.new(args)
+          self.model = Qwen2Model.new(args)
           unless args.tie_word_embeddings
-            @lm_head = MLX::NN::Linear.new(args.hidden_size, args.vocab_size, bias: false)
+            self.lm_head = MLX::NN::Linear.new(args.hidden_size, args.vocab_size, bias: false)
           end
         end
 
         def call(inputs, cache: nil)
-          out = @model.call(inputs, cache: cache)
+          out = model.call(inputs, cache: cache)
           if @args.tie_word_embeddings
-            @model.instance_variable_get(:@embed_tokens).as_linear(out)
+            model.embed_tokens.as_linear(out)
           else
-            @lm_head.call(out)
+            lm_head.call(out)
           end
         end
 
@@ -154,7 +152,7 @@ module MlxLm
         end
 
         def layers
-          @model.layers
+          model.layers
         end
       end
 

@@ -39,6 +39,14 @@ module MlxLm
         weights = model.sanitize(weights)
       end
 
+      # Apply quantization if config specifies it
+      quantization = config["quantization"]
+      if quantization
+        group_size = quantization["group_size"] || 64
+        bits = quantization["bits"] || 4
+        Quantize.quantize_model(model, group_size: group_size, bits: bits, weights: weights)
+      end
+
       # Load weights into model
       model.load_weights(weights, strict: false)
 
