@@ -11,7 +11,11 @@ require_relative "mlx_lm/models/gemma"
 require_relative "mlx_lm/models/qwen2"
 require_relative "mlx_lm/models/phi3"
 require_relative "mlx_lm/models/starcoder2"
+require_relative "mlx_lm/models/stablelm"
+require_relative "mlx_lm/models/cohere"
+require_relative "mlx_lm/models/gemma2"
 require_relative "mlx_lm/generate"
+require_relative "mlx_lm/quantize"
 require_relative "mlx_lm/load_utils"
 
 module MlxLm
