@@ -92,28 +92,34 @@ module MlxLm
       end
 
       class MoEGate < MLX::NN::Module
-        def initialize(dim, n_routed_experts, num_experts_per_tok)
+        def initialize(args)
           super()
-          @num_experts_per_tok = num_experts_per_tok
-          self.weight = MLX::Core.zeros([n_routed_experts, dim])
+          @top_k = args.num_experts_per_tok
+          self.weight = MLX::Core.zeros([args.n_routed_experts, args.hidden_size])
         end
 
         def call(x)
           mx = MLX::Core
           gates = mx.matmul(x, mx.transpose(weight))
-          [gates, @num_experts_per_tok]
+          scores = mx.softmax(gates.astype(mx.float32), -1).astype(gates.dtype)
+          k = @top_k
+          inds = mx.stop_gradient(mx.argpartition(scores * -1.0, k - 1, -1))
+          take_ids = mx.array((0...k).to_a, dtype: mx.int32)
+          inds = mx.take(inds, take_ids, -1)
+          scores = mx.take_along_axis(scores, inds, -1)
+          [inds, scores]
         end
       end
 
       class DeepseekMoE < MLX::NN::Module
         def initialize(args)
           super()
+          @n_shared_experts = args.n_shared_experts
           dim = args.hidden_size
           moe_dim = args.moe_intermediate_size
-          @num_experts_per_tok = args.num_experts_per_tok
 
-          self.gate = MoEGate.new(dim, args.n_routed_experts, args.num_experts_per_tok)
-          self.experts = Array.new(args.n_routed_experts) { DeepseekMLP.new(dim, moe_dim) }
+          self.switch_mlp = SwitchLayers::SwitchGLU.new(dim, moe_dim, args.n_routed_experts)
+          self.gate = MoEGate.new(args)
 
           if args.n_shared_experts && args.n_shared_experts > 0
             shared_dim = moe_dim * args.n_shared_experts
@@ -123,40 +129,11 @@ module MlxLm
 
         def call(x)
           mx = MLX::Core
-          ne = @num_experts_per_tok
-          orig_shape = x.shape
-          dims = x.shape[-1]
-          tokens = x.size / dims
-          x_flat = x.reshape([tokens, dims])
+          inds, scores = gate.call(x)
+          y = switch_mlp.call(x, inds)
+          y = mx.sum(y * mx.expand_dims(scores, -1), -2)
 
-          gates, _ne = gate.call(x_flat)
-          inds = mx.argpartition(gates * -1.0, ne - 1, -1)
-          take_ids = mx.array((0...ne).to_a, mx.int32)
-          inds = mx.take(inds, take_ids, 1)
-
-          scores = mx.take_along_axis(gates, inds, -1)
-          scores = mx.softmax(scores.astype(mx.float32), -1).astype(gates.dtype)
-
-          inds_list = inds.tolist
-          y_rows = []
-          (0...x_flat.shape[0]).each do |i|
-            xt = x_flat[i]
-            selected = [inds_list[i]].flatten
-            expert_outs = selected.map { |eidx|
-              mx.expand_dims(experts[eidx].call(xt), 0)
-            }
-            yt = mx.concatenate(expert_outs, 0)
-            st = scores[i]
-            weighted = yt * mx.expand_dims(st, -1)
-            summed = mx.sum(weighted, 0)
-            y_rows << mx.expand_dims(summed, 0)
-          end
-
-          y = mx.concatenate(y_rows, 0)
-          y = y.reshape(orig_shape)
-
-          # Add shared experts if present
-          if respond_to?(:shared_experts)
+          if @n_shared_experts && @n_shared_experts > 0
             y = y + shared_experts.call(x)
           end
 
@@ -229,7 +206,26 @@ module MlxLm
         end
 
         def sanitize(weights)
-          weights.reject { |k, _| k.include?("self_attn.rotary_emb.inv_freq") }
+          mx = MLX::Core
+          result = weights.reject { |k, _| k.include?("self_attn.rotary_emb.inv_freq") }
+
+          # Convert per-expert weights to stacked SwitchGLU format
+          @args.num_hidden_layers.times do |l|
+            prefix = "model.layers.#{l}"
+            ["gate_proj", "down_proj", "up_proj"].each do |m|
+              ["weight", "scales", "biases"].each do |k|
+                key0 = "#{prefix}.mlp.experts.0.#{m}.#{k}"
+                if result.key?(key0)
+                  to_join = (0...@args.n_routed_experts).map { |e|
+                    result.delete("#{prefix}.mlp.experts.#{e}.#{m}.#{k}")
+                  }
+                  result["#{prefix}.mlp.switch_mlp.#{m}.#{k}"] = mx.stack(to_join)
+                end
+              end
+            end
+          end
+
+          result
         end
 
         def layers

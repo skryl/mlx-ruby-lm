@@ -67,19 +67,6 @@ module MlxLm
         end
       end
 
-      class Expert < MLX::NN::Module
-        def initialize(dim, hidden_dim)
-          super()
-          self.gate_proj = MLX::NN::Linear.new(dim, hidden_dim, bias: false)
-          self.down_proj = MLX::NN::Linear.new(hidden_dim, dim, bias: false)
-          self.up_proj = MLX::NN::Linear.new(dim, hidden_dim, bias: false)
-        end
-
-        def call(x)
-          down_proj.call(MLX::NN.silu(gate_proj.call(x)) * up_proj.call(x))
-        end
-      end
-
       class SparseMoeBlock < MLX::NN::Module
         def initialize(args)
           super()
@@ -89,46 +76,24 @@ module MlxLm
           hidden_dim = args.intermediate_size
 
           self.gate = MLX::NN::Linear.new(dim, @num_experts, bias: false)
-          self.experts = Array.new(@num_experts) { Expert.new(dim, hidden_dim) }
+          self.switch_mlp = SwitchLayers::SwitchGLU.new(dim, hidden_dim, @num_experts)
         end
 
         def call(x)
           mx = MLX::Core
-          ne = @num_experts_per_tok
-          orig_shape = x.shape
-          dims = x.shape[-1]
-          tokens = x.size / dims
-          x_flat = x.reshape([tokens, dims])
+          k = @num_experts_per_tok
 
-          # Route tokens to experts
-          gates = gate.call(x_flat)
-          inds = mx.argpartition(gates * -1.0, ne - 1, -1)
-          take_ids = mx.array((0...ne).to_a, mx.int32)
-          inds = mx.take(inds, take_ids, 1)
+          gates = gate.call(x)
+          inds = mx.stop_gradient(mx.argpartition(gates * -1.0, k - 1, -1))
+          take_ids = mx.array((0...k).to_a, dtype: mx.int32)
+          inds = mx.take(inds, take_ids, -1)
 
           scores = mx.take_along_axis(gates, inds, -1)
           scores = mx.softmax(scores.astype(mx.float32), -1).astype(gates.dtype)
 
-          # Evaluate experts per token
-          inds_list = inds.tolist
-          y_rows = []
-          (0...x_flat.shape[0]).each do |i|
-            xt = x_flat[i]
-            selected = inds_list[i]
-            selected = [selected].flatten
-            expert_outs = selected.map { |eidx|
-              mx.expand_dims(experts[eidx].call(xt), 0)
-            }
-            yt = mx.concatenate(expert_outs, 0)
-            # Weighted sum: yt shape [ne, dim], scores[i] shape [ne]
-            st = scores[i]
-            weighted = yt * mx.expand_dims(st, -1)
-            summed = mx.sum(weighted, 0)
-            y_rows << mx.expand_dims(summed, 0)
-          end
-
-          y = mx.concatenate(y_rows, 0)
-          y.reshape(orig_shape)
+          y = switch_mlp.call(x, inds)
+          y = mx.sum(y * mx.expand_dims(scores, -1), -2)
+          y
         end
       end
 
@@ -193,8 +158,26 @@ module MlxLm
         end
 
         def sanitize(weights)
+          mx = MLX::Core
           result = weights.reject { |k, _| k.include?("self_attn.rotary_emb.inv_freq") }
           result.delete("lm_head.weight") if @args.tie_word_embeddings
+
+          # Convert per-expert weights to stacked SwitchGLU format
+          @args.num_hidden_layers.times do |l|
+            prefix = "model.layers.#{l}"
+            [["w1", "gate_proj"], ["w2", "down_proj"], ["w3", "up_proj"]].each do |n, m|
+              ["weight", "scales", "biases"].each do |k|
+                key0 = "#{prefix}.block_sparse_moe.experts.0.#{n}.#{k}"
+                if result.key?(key0)
+                  to_join = (0...@args.num_local_experts).map { |e|
+                    result.delete("#{prefix}.block_sparse_moe.experts.#{e}.#{n}.#{k}")
+                  }
+                  result["#{prefix}.block_sparse_moe.switch_mlp.#{m}.#{k}"] = mx.stack(to_join)
+                end
+              end
+            end
+          end
+
           result
         end
 
