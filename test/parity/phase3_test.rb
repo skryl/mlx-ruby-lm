@@ -116,7 +116,7 @@ class Phase3LlamaModelTest < Minitest::Test
     model = make_small_model
     mx_mod.eval(model.parameters)
 
-    input_ids = mx_mod.array([[1, 2, 3, 4]]).astype(mx_mod.int32)
+    input_ids = mx_mod.array([[1, 2, 3, 4]], dtype: mx_mod.int32)
     logits = model.call(input_ids)
     mx_mod.eval(logits)
 
@@ -160,14 +160,14 @@ class Phase3LlamaModelTest < Minitest::Test
     cache = MlxLm::Cache.make_prompt_cache(model)
 
     # Prefill
-    input_ids = mx.array([[1, 2, 3]]).astype(mx.int32)
+    input_ids = mx.array([[1, 2, 3]], dtype: mx.int32)
     logits1 = model.call(input_ids, cache: cache)
     mx.eval(logits1)
 
     assert_equal [1, 3, 100], logits1.shape
 
     # Generation step
-    next_token = mx.array([[4]]).astype(mx.int32)
+    next_token = mx.array([[4]], dtype: mx.int32)
     logits2 = model.call(next_token, cache: cache)
     mx.eval(logits2)
 
@@ -188,7 +188,7 @@ class Phase3LlamaModelTest < Minitest::Test
     model = MlxLm::Models::Llama::Model.new(args)
     mx.eval(model.parameters)
 
-    input_ids = mx.array([[1, 2]]).astype(mx.int32)
+    input_ids = mx.array([[1, 2]], dtype: mx.int32)
     logits = model.call(input_ids)
     mx.eval(logits)
     assert_equal [1, 2, 100], logits.shape
@@ -207,7 +207,7 @@ class Phase3LlamaModelTest < Minitest::Test
     model = MlxLm::Models::Llama::Model.new(args)
     mx.eval(model.parameters)
 
-    input_ids = mx.array([[1, 2]]).astype(mx.int32)
+    input_ids = mx.array([[1, 2]], dtype: mx.int32)
     logits = model.call(input_ids)
     mx.eval(logits)
     assert_equal [1, 2, 100], logits.shape

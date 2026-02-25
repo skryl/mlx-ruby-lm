@@ -37,7 +37,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::StableLM::Model.new(args)
     @mx.eval(*model.parameters.values.flat_map { |v| v.is_a?(Hash) ? v.values : [v] })
 
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 128], output.shape
   end
@@ -50,11 +50,11 @@ class Phase8ArchBatch2Test < Minitest::Test
 
     cache = Array.new(2) { MlxLm::KVCache.new }
 
-    token1 = @mx.array([[1]]).astype(@mx.int32)
+    token1 = @mx.array([[1]], dtype: @mx.int32)
     out1 = model.call(token1, cache: cache)
     assert_equal [1, 1, 128], out1.shape
 
-    token2 = @mx.array([[2]]).astype(@mx.int32)
+    token2 = @mx.array([[2]], dtype: @mx.int32)
     out2 = model.call(token2, cache: cache)
     assert_equal [1, 1, 128], out2.shape
   end
@@ -79,7 +79,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::StableLM::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 128], output.shape
   end
@@ -91,7 +91,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     # Partial rotary factor of 0.5 with head_dim=32 means RoPE on 16 dims
     # Just verify the model constructs and produces valid output
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
-    tokens = @mx.array([[1]]).astype(@mx.int32)
+    tokens = @mx.array([[1]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 1, 128], output.shape
   end
@@ -132,7 +132,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::Cohere::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 128], output.shape
   end
@@ -145,11 +145,11 @@ class Phase8ArchBatch2Test < Minitest::Test
 
     cache = Array.new(2) { MlxLm::KVCache.new }
 
-    token1 = @mx.array([[1]]).astype(@mx.int32)
+    token1 = @mx.array([[1]], dtype: @mx.int32)
     out1 = model.call(token1, cache: cache)
     assert_equal [1, 1, 128], out1.shape
 
-    token2 = @mx.array([[2]]).astype(@mx.int32)
+    token2 = @mx.array([[2]], dtype: @mx.int32)
     out2 = model.call(token2, cache: cache)
     assert_equal [1, 1, 128], out2.shape
   end
@@ -160,7 +160,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::Cohere::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     # Just verify it works (parallel residual is an internal implementation detail)
     assert_equal [1, 3, 128], output.shape
@@ -172,7 +172,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::Cohere::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([[1]]).astype(@mx.int32)
+    tokens = @mx.array([[1]], dtype: @mx.int32)
     output = model.call(tokens)
     # Output should be scaled by logit_scale (0.0625)
     # Values should generally be small due to the scaling
@@ -216,7 +216,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::Gemma2::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 128], output.shape
   end
@@ -229,11 +229,11 @@ class Phase8ArchBatch2Test < Minitest::Test
 
     cache = Array.new(2) { MlxLm::KVCache.new }
 
-    token1 = @mx.array([[1]]).astype(@mx.int32)
+    token1 = @mx.array([[1]], dtype: @mx.int32)
     out1 = model.call(token1, cache: cache)
     assert_equal [1, 1, 128], out1.shape
 
-    token2 = @mx.array([[2]]).astype(@mx.int32)
+    token2 = @mx.array([[2]], dtype: @mx.int32)
     out2 = model.call(token2, cache: cache)
     assert_equal [1, 1, 128], out2.shape
   end
@@ -258,7 +258,7 @@ class Phase8ArchBatch2Test < Minitest::Test
     model = MlxLm::Models::Gemma2::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([[1]]).astype(@mx.int32)
+    tokens = @mx.array([[1]], dtype: @mx.int32)
     output = model.call(tokens)
     @mx.eval(output)
 

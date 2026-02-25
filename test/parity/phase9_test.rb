@@ -63,7 +63,7 @@ class Phase9LoRATest < Minitest::Test
     lora_embed = MlxLm::Tuner::LoRAEmbedding.from_base(embed, r: 8, scale: 20.0)
     @mx.eval(*MLX::Utils.tree_flatten(lora_embed.parameters).map { |_, v| v })
 
-    ids = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    ids = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = lora_embed.call(ids)
     assert_equal [1, 3, 32], output.shape
   end

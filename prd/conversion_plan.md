@@ -596,155 +596,59 @@ bundle exec rake test:parity_report
 
 ## MLX-Ruby Gaps & Workarounds
 
-The following issues were discovered during implementation. Each required a
-workaround in the `mlx-ruby-lm` codebase.
+The following issues were discovered during implementation. Most have now been
+**resolved upstream** in mlx-ruby `476f721` and mlx-onnx `128d7de`.
 
 ### API Issues
 
-| # | Issue | Severity | Workaround |
-|---|-------|----------|------------|
-| 1 | `mx.array(values, dtype: ...)` raises `ArgumentError` — the `dtype:` keyword is rejected even though the error message says it accepts `Dtype`, symbol, or string | High | Create float32 array first, then `.astype(mx.int32)` etc. |
-| 2 | `mx.mean(x, axis, keepdims: true)` not supported — no `keepdims` parameter on `mean` | Medium | `mx.expand_dims(mx.mean(x, axis), -1)` |
-| 3 | `MLX::NN::Dropout.new(p: 0.5)` rejects keyword arg — constructor only accepts positional `Dropout.new(0.5)` | Low | Use positional argument |
-| 4 | `mx.random_uniform` only works with float dtypes — passing `mx.int32` raises error | Low | Generate as float32, then `.astype(mx.int32)` |
-| 5 | `mx.save_safetensors` not available — MLX not compiled with `MLX_BUILD_SAFETENSORS=ON` | Medium | Use Ruby `safetensors` gem for serialization |
-| 6 | No `SwitchGLU` layer — Python mlx-lm uses it for efficient stacked MoE experts | Medium | Per-token expert routing loop (functional but slower) |
+| # | Issue | Severity | Status |
+|---|-------|----------|--------|
+| 1 | `mx.array(values, dtype: ...)` raises `ArgumentError` | High | **RESOLVED** — upstream now accepts `dtype:` keyword with conflict checking against positional dtype. Workarounds removed from lib/ and test/. |
+| 2 | `mx.mean(x, axis, keepdims: true)` not supported | Medium | **RESOLVED** — upstream added `keepdims:` to `mean` (and `Array#mean`). Workaround in `gemma2.rb` Gemma2RMSNorm removed. |
+| 3 | `MLX::NN::Dropout.new(p: 0.5)` rejects keyword arg | Low | Open — use positional argument |
+| 4 | `mx.random_uniform` only works with float dtypes | Low | Open — generate as float32, then `.astype(mx.int32)` |
+| 5 | `mx.save_safetensors` not available | Medium | **RESOLVED** — upstream now builds with `MLX_BUILD_SAFETENSORS=ON` by default. |
+| 6 | No `SwitchGLU` layer for MoE | Medium | Open — per-token expert routing loop (functional but slower) |
 
 ### Ruby ↔ MLX Coercion Issues
 
-| # | Issue | Severity | Workaround |
-|---|-------|----------|------------|
-| 7 | `Float * MLX::Array` raises `TypeError` — Ruby `Float#*` can't coerce MLX arrays | High | Always put MLX array on the left: `array * scalar` |
-| 8 | `Float + MLX::Array` raises `TypeError` — same coercion issue with addition | High | `array + scalar` instead of `scalar + array` |
-| 9 | No unary negation `-array` | Low | `MLX::Core.negative(array)` |
-| 10 | No comparison operators `>`, `<` on arrays | Low | `MLX::Core.greater()`, `MLX::Core.less()` |
+| # | Issue | Severity | Status |
+|---|-------|----------|--------|
+| 7 | `Float * MLX::Array` raises `TypeError` | High | **RESOLVED** — upstream added `Array#coerce` so `Numeric op Array` works. |
+| 8 | `Float + MLX::Array` raises `TypeError` | High | **RESOLVED** — same `coerce` fix. |
+| 9 | No unary negation `-array` | Low | Open — use `MLX::Core.negative(array)` |
+| 10 | No comparison operators `>`, `<` on arrays | Low | Open — use `MLX::Core.greater()`, `MLX::Core.less()` |
 
 ### NN Module System
 
-| # | Issue | Severity | Workaround |
-|---|-------|----------|------------|
-| 11 | Instance variables invisible to Module traversal — `@x = Module.new(...)` doesn't register children in `@state`, so `children`, `leaf_modules`, `parameters`, `load_weights`, and `nn.quantize` all miss them | **Critical** | Must use `self.x = Module.new(...)` (goes through `method_missing` → `@state`) for every child module in every model. Required refactoring all model files. |
-| 12 | `update_modules_impl` missing Module→Hash recursion — when `nn.quantize` replaces layers, the code didn't handle `current_value=Module` + `new_value=Hash` | High | Patched `mlx-ruby/lib/mlx/nn/base.rb` to add `elsif current_value.is_a?(Module) && (new_value.is_a?(Hash) \|\| new_value.is_a?(Array))` branch for recursive descent. |
+| # | Issue | Severity | Status |
+|---|-------|----------|--------|
+| 11 | Instance variables invisible to Module traversal | **Critical** | Open — must use `self.x =` pattern. Upstream now documents this requirement prominently. |
+| 12 | `update_modules_impl` missing Module→Hash recursion | High | **RESOLVED** — fix merged upstream in `476f721`. Local patch removed. |
 
 ### Safetensors Gem Compatibility
 
-| # | Issue | Severity | Workaround |
-|---|-------|----------|------------|
-| 13 | Dtype string format mismatch — Ruby `safetensors` gem v0.2.2 expects lowercase `"float32"` for serialization but returns uppercase `"F32"` on deserialization | Medium | `weight_utils.rb` accepts both formats: `dtype_str == "F32" \|\| dtype_str == "float32"` |
+| # | Issue | Severity | Status |
+|---|-------|----------|--------|
+| 13 | Dtype string format mismatch (`"F32"` vs `"float32"`) | Medium | Open — `weight_utils.rb` still accepts both formats for compatibility with the Ruby safetensors gem. |
 
-### Impact Summary
+### ONNX Export (Issue 14)
 
-- **Issues 7, 8, 11** were the most pervasive — they affected every model file and
-  many utility modules. Issue 11 alone required rewriting every constructor in every
-  model architecture.
-- **Issue 12** required patching mlx-ruby itself (the only upstream change).
-- **Issue 1** affected any code path that creates typed arrays from Ruby values.
-- **Issues 9, 10** are minor and only arise in specific model architectures.
+| # | Issue | Severity | Status |
+|---|-------|----------|--------|
+| 14a | `GreaterEqual` missing from mlx-onnx IR lowering | High | **RESOLVED** — upstream mlx-onnx `128d7de` added GreaterEqual support. All 11 dense models now export successfully with 100% node coverage. |
+| 14b | MoE models crash during ONNX tracing (SIGILL) | Medium | Open — mixtral and deepseek use `tolist` for data-dependent expert routing, which crashes the graph tracer. Requires vectorized MoE dispatch or `SwitchGLU`. |
 
-### Recommendations for mlx-ruby Upstream
+### Remaining Open Issues
 
-1. Fix `mx.array(values, dtype:)` to accept dtype keyword argument
-2. Add `keepdims:` parameter to reduction ops (`mean`, `sum`, etc.)
-3. Implement Ruby `coerce` on `MLX::Core::Array` so `Float * array` works
-4. Compile with `MLX_BUILD_SAFETENSORS=ON` by default
-5. Add `SwitchGLU` layer for MoE model support
-6. Document the `self.x =` vs `@x =` requirement for Module children prominently
-7. Apply the `update_modules_impl` fix below (Issue 12)
-8. Add `GreaterEqual` to the mlx-onnx IR lowering pass (Issue 14 below)
-
-### Required Upstream: ONNX Export — Missing Ops & Tracer Limitations (Issue 14)
-
-Tested all 13 model architectures for ONNX export via `MLX::ONNX.export_onnx`.
-**0/13 models export successfully.** The test file is at `test/parity/onnx_export_test.rb`.
-
-#### Category 1: Missing `GreaterEqual` op (11 dense models)
-
-All dense (non-MoE) models fail on a single missing ONNX lowering:
-**`GreaterEqual`**, used in the causal attention mask (`>=` comparison).
-
-| Model | Total Nodes | Supported | Coverage | Missing Ops |
-|-------|-------------|-----------|----------|-------------|
-| llama | 255 | 253 | 99.2% | `GreaterEqual` |
-| gemma | 266 | 264 | 99.2% | `GreaterEqual` |
-| gemma2 | 353 | 351 | 99.4% | `GreaterEqual` |
-| qwen2 | 261 | 259 | 99.2% | `GreaterEqual` |
-| phi3 | 243 | 241 | 99.2% | `GreaterEqual` |
-| starcoder2 | 298 | 296 | 99.3% | `GreaterEqual` |
-| stablelm | 289 | 287 | 99.3% | `GreaterEqual` |
-| cohere | 267 | 265 | 99.3% | `GreaterEqual` |
-| olmo2 | 293 | 291 | 99.3% | `GreaterEqual` |
-| gpt_neox | 264 | 262 | 99.2% | `GreaterEqual` |
-| internlm2 | 245 | 243 | 99.2% | `GreaterEqual` |
-
-**Fix:** Add `GreaterEqual` → ONNX `GreaterOrEqual` mapping to `mlx-onnx`'s
-IR lowering pass. This single op blocks every dense model — only 2 unsupported
-nodes out of 240–350 per model. Once added, all 11 dense models should export.
-
-#### Category 2: Tracer crash — SIGILL (2 MoE models)
-
-| Model | Signal | Root Cause |
-|-------|--------|------------|
-| mixtral | SIGILL | `inds.tolist` in `SparseMoeBlock#call` forces materialization during tracing |
-| deepseek | SIGILL | `inds.tolist` in `DeepseekMoE#call` forces materialization during tracing |
-
-Both MoE models use per-token expert routing with `inds.tolist` to extract
-expert indices into Ruby arrays, creating **data-dependent control flow** that
-the ONNX graph tracer cannot follow. The process crashes (SIGILL) before even
-the compatibility report can complete.
-
-**Fix options:**
-1. **(Preferred) Upstream:** Add `SwitchGLU` or a vectorized MoE dispatch
-   primitive to mlx-ruby so expert routing can be expressed as pure tensor ops
-   (no Ruby-level iteration over `tolist` indices).
-2. **(Workaround) Model-level:** Rewrite the MoE `call` methods to avoid
-   `tolist` — e.g., use `mx.take` / `mx.scatter` / masked computation so the
-   entire routing graph stays in MLX and is traceable.
-
-#### Priority
-
-| Priority | Action | Impact |
-|----------|--------|--------|
-| **P0** | Add `GreaterEqual` to mlx-onnx | Unblocks all 11 dense model architectures |
-| **P1** | Vectorized MoE dispatch (no tolist) | Unblocks mixtral + deepseek ONNX export |
-
-### Required Upstream Patch: `update_modules_impl` (Issue 12)
-
-**File:** `lib/mlx/nn/base.rb`
-
-When `nn.quantize` (or any `update_modules` call) replaces layers in a model,
-it builds a nested Hash/Array tree of replacement modules. The existing code
-handles `Module→Module` replacement and `Hash/Array→Hash/Array` recursion, but
-misses the case where the current value is a `Module` and the replacement is a
-`Hash` or `Array` (meaning "recurse into this Module's children"). Without this
-fix, `nn.quantize` fails with `"Received invalid type: Hash"`.
-
-**Patch** (against commit `148f658`):
-
-```diff
---- a/lib/mlx/nn/base.rb
-+++ b/lib/mlx/nn/base.rb
-@@ -323,6 +323,8 @@ module MLX
-               current_value = dst[k]
-               if current_value.is_a?(Module) && new_value.is_a?(Module)
-                 dst[k] = new_value
-+              elsif current_value.is_a?(Module) && (new_value.is_a?(Hash) || new_value.is_a?(Array))
-+                update_modules_impl(current_value, new_value, strict)
-               elsif current_value.is_a?(Hash) || current_value.is_a?(Array)
-                 update_modules_impl(current_value, new_value, strict)
-               elsif strict && new_value != {}
-@@ -337,6 +339,8 @@ module MLX
-             current_value = dst[i]
-             if current_value.is_a?(Module) && new_value.is_a?(Module)
-               dst[i] = new_value
-+            elsif current_value.is_a?(Module) && (new_value.is_a?(Hash) || new_value.is_a?(Array))
-+              update_modules_impl(current_value, new_value, strict)
-             elsif current_value.is_a?(Hash) || current_value.is_a?(Array)
-               update_modules_impl(current_value, new_value, strict)
-             elsif strict && new_value != {}
-```
-
-This adds two `elsif` branches (one in the Hash iteration, one in the Array
-iteration) that detect when a Module needs recursive descent rather than
-direct replacement. The fix has been applied locally in the `mlx-ruby`
-submodule at commit `85afc8a`.
+| # | Issue | Recommended Fix |
+|---|-------|-----------------|
+| 3 | `Dropout.new(p:)` keyword arg | Add keyword support upstream |
+| 4 | `random_uniform` int dtypes | Accept int dtypes in upstream |
+| 6 | No `SwitchGLU` layer | Add upstream; enables traceable MoE |
+| 9 | No unary negation `-array` | Add `-@` method to `MLX::Core::Array` |
+| 10 | No `>`, `<` operators | Add comparison operator methods |
+| 11 | `self.x =` vs `@x =` | Continue documenting; no code fix possible |
+| 13 | Safetensors dtype format | Ruby safetensors gem issue; accept both |
+| 14b | MoE ONNX tracing crash | Vectorized MoE dispatch or `SwitchGLU` |
 

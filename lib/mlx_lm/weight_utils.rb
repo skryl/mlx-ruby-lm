@@ -58,19 +58,19 @@ module MlxLm
       elsif dtype_str == "F16"
         # 16-bit float: unpack as uint16, create array as float32, then view as float16
         values = data.unpack("S<*")
-        mx.array(values).astype(mx.uint16).view(mx.float16).reshape(shape)
+        mx.array(values, dtype: mx.uint16).view(mx.float16).reshape(shape)
       elsif dtype_str == "BF16"
         values = data.unpack("S<*")
-        mx.array(values).astype(mx.uint16).view(mx.bfloat16).reshape(shape)
+        mx.array(values, dtype: mx.uint16).view(mx.bfloat16).reshape(shape)
       elsif dtype_str == "I32" || dtype_str == "int32"
         values = data.unpack("l<*")
-        mx.array(values).astype(mx.int32).reshape(shape)
+        mx.array(values, dtype: mx.int32).reshape(shape)
       elsif dtype_str == "I64"
         values = data.unpack("q<*")
-        mx.array(values).astype(mx.int64).reshape(shape)
+        mx.array(values, dtype: mx.int64).reshape(shape)
       elsif dtype_str == "U8"
         values = data.unpack("C*")
-        mx.array(values).astype(mx.uint8).reshape(shape)
+        mx.array(values, dtype: mx.uint8).reshape(shape)
       else
         # Fallback: try F32
         values = data.unpack("e*")

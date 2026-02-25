@@ -46,7 +46,7 @@ class Phase7QuantizeTest < Minitest::Test
     @mx.eval(*model.parameters.values)
     MlxLm::Quantize.quantize_model(model, group_size: 32, bits: 4)
 
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 128], output.shape, "Quantized model should produce same shape output"
   end
@@ -103,7 +103,7 @@ class Phase7QuantizeTest < Minitest::Test
     qembed = embed.to_quantized(group_size: 32, bits: 4)
     assert_instance_of MLX::NN::QuantizedEmbedding, qembed
 
-    ids = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    ids = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = qembed.call(ids)
     assert_equal [1, 3, 32], output.shape
   end
@@ -135,12 +135,12 @@ class Phase7QuantizeTest < Minitest::Test
     cache = Array.new(2) { MlxLm::KVCache.new }
 
     # First token
-    token1 = @mx.array([[1]]).astype(@mx.int32)
+    token1 = @mx.array([[1]], dtype: @mx.int32)
     out1 = model.call(token1, cache: cache)
     assert_equal [1, 1, 128], out1.shape
 
     # Second token (using cache)
-    token2 = @mx.array([[2]]).astype(@mx.int32)
+    token2 = @mx.array([[2]], dtype: @mx.int32)
     out2 = model.call(token2, cache: cache)
     assert_equal [1, 1, 128], out2.shape
   end

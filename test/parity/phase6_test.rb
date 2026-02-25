@@ -63,7 +63,7 @@ class Phase6GemmaTest < Minitest::Test
   # Test 5: Gemma forward pass produces correct output shape
   def test_gemma_forward_shape
     model = MlxLm::Models::Gemma::Model.new(@args)
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 100], output.shape, "Output should be [batch, seq_len, vocab_size]"
   end
@@ -72,7 +72,7 @@ class Phase6GemmaTest < Minitest::Test
   def test_gemma_forward_with_cache
     model = MlxLm::Models::Gemma::Model.new(@args)
     cache = Array.new(2) { MlxLm::KVCache.new }
-    token = @mx.array([[5]]).astype(@mx.int32)
+    token = @mx.array([[5]], dtype: @mx.int32)
     output = model.call(token, cache: cache)
     assert_equal [1, 1, 100], output.shape
   end
@@ -105,7 +105,7 @@ class Phase6Qwen2Test < Minitest::Test
   # Test 8: Qwen2 forward pass produces correct output shape
   def test_qwen2_forward_shape
     model = MlxLm::Models::Qwen2::Model.new(@args)
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 100], output.shape
   end
@@ -152,7 +152,7 @@ class Phase6Phi3Test < Minitest::Test
   # Test 11: Phi3 forward pass
   def test_phi3_forward_shape
     model = MlxLm::Models::Phi3::Model.new(@args)
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 100], output.shape
   end
@@ -185,7 +185,7 @@ class Phase6Starcoder2Test < Minitest::Test
   # Test 13: Starcoder2 forward pass
   def test_starcoder2_forward_shape
     model = MlxLm::Models::Starcoder2::Model.new(@args)
-    tokens = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    tokens = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(tokens)
     assert_equal [1, 3, 100], output.shape
   end

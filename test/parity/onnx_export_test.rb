@@ -189,7 +189,7 @@ class OnnxExportTest < Minitest::Test
       params = MLX::Utils.tree_flatten(model.parameters).map { |_, v| v }
       mx.eval(*params) unless params.empty?
 
-      input = mx.array([[1, 2, 3]]).astype(mx.int32)
+      input = mx.array([[1, 2, 3]], dtype: mx.int32)
       fun = ->(x) { model.call(x) }
 
       # Run compatibility report first (does not require full lowering)

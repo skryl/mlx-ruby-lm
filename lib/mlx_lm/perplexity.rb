@@ -16,7 +16,7 @@ module MlxLm
     def log_likelihood(model, tokens, batch_size: nil)
       mx = MLX::Core
 
-      token_arr = tokens.is_a?(MLX::Core::Array) ? tokens : mx.array(tokens).astype(mx.int32)
+      token_arr = tokens.is_a?(MLX::Core::Array) ? tokens : mx.array(tokens, dtype: mx.int32)
       total_tokens = token_arr.size
 
       # Process all at once for small sequences

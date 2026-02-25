@@ -13,7 +13,7 @@ class Phase4SamplingTest < Minitest::Test
   # Test 1: Greedy sampling (temp=0) returns argmax
   def test_greedy_sampling
     sampler = MlxLm::SampleUtils.make_sampler(temp: 0.0)
-    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1]]).astype(@mx.float32)
+    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1]], dtype: @mx.float32)
     token = sampler.call(logprobs)
     assert_equal 3, token.item, "Greedy should pick index of max logprob"
   end
@@ -23,7 +23,7 @@ class Phase4SamplingTest < Minitest::Test
     # With very low temp, should behave close to greedy
     # We use a fixed seed for reproducibility
     @mx.random_seed(42)
-    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1]]).astype(@mx.float32)
+    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1]], dtype: @mx.float32)
 
     # At very low temperature, categorical should pick the argmax (almost always)
     sampler_low = MlxLm::SampleUtils.make_sampler(temp: 0.01)
@@ -38,7 +38,7 @@ class Phase4SamplingTest < Minitest::Test
 
   # Test 3: Top-k filtering masks low-probability tokens
   def test_top_k_filtering
-    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1, -3.0]]).astype(@mx.float32)
+    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1, -3.0]], dtype: @mx.float32)
     result = MlxLm::SampleUtils.apply_top_k(logprobs, 2)
     result_list = result.tolist.flatten
 
@@ -54,7 +54,7 @@ class Phase4SamplingTest < Minitest::Test
   # Test 4: Top-p (nucleus) filtering
   def test_top_p_filtering
     # Create logprobs where one token dominates
-    logprobs = @mx.array([[0.0, -10.0, -10.0, -10.0]]).astype(@mx.float32)
+    logprobs = @mx.array([[0.0, -10.0, -10.0, -10.0]], dtype: @mx.float32)
     result = MlxLm::SampleUtils.apply_top_p(logprobs, 0.5)
     result_list = result.tolist.flatten
 
@@ -65,7 +65,7 @@ class Phase4SamplingTest < Minitest::Test
   # Test 5: Min-p filtering
   def test_min_p_filtering
     # One dominant token, rest very low
-    logprobs = @mx.array([[-0.1, -5.0, -5.0, -5.0]]).astype(@mx.float32)
+    logprobs = @mx.array([[-0.1, -5.0, -5.0, -5.0]], dtype: @mx.float32)
     result = MlxLm::SampleUtils.apply_min_p(logprobs, 0.5, 1)
     result_list = result.tolist.flatten
 
@@ -79,8 +79,8 @@ class Phase4SamplingTest < Minitest::Test
   # Test 6: Repetition penalty reduces probability of repeated tokens
   def test_repetition_penalty
     processor = MlxLm::SampleUtils.make_repetition_penalty(2.0, 20)
-    logits = @mx.array([[1.0, 2.0, 3.0, 4.0]]).astype(@mx.float32)
-    tokens = @mx.array([0, 2]).astype(@mx.int32) # Tokens 0 and 2 were already generated
+    logits = @mx.array([[1.0, 2.0, 3.0, 4.0]], dtype: @mx.float32)
+    tokens = @mx.array([0, 2], dtype: @mx.int32) # Tokens 0 and 2 were already generated
 
     result = processor.call(tokens, logits)
     result_list = result.tolist.flatten
@@ -99,7 +99,7 @@ class Phase4SamplingTest < Minitest::Test
   def test_sampler_chaining
     @mx.random_seed(42)
     sampler = MlxLm::SampleUtils.make_sampler(temp: 1.0, top_k: 2)
-    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1, -3.0]]).astype(@mx.float32)
+    logprobs = @mx.array([[-1.0, -0.5, -2.0, -0.1, -3.0]], dtype: @mx.float32)
 
     counts = Hash.new(0)
     100.times do
@@ -126,7 +126,7 @@ class Phase4SamplingTest < Minitest::Test
   def test_categorical_sampling_distribution
     @mx.random_seed(123)
     # Make one token vastly more probable
-    logprobs = @mx.array([[-10.0, -10.0, 0.0, -10.0]]).astype(@mx.float32)
+    logprobs = @mx.array([[-10.0, -10.0, 0.0, -10.0]], dtype: @mx.float32)
 
     counts = Hash.new(0)
     100.times do
@@ -188,14 +188,14 @@ class Phase4GenerateTest < Minitest::Test
         end
       end
 
-      mx.array(logits_data).astype(mx.float32)
+      mx.array(logits_data, dtype: mx.float32)
     end
   end
 
   # Test 10: generate_step produces correct tokens from dummy model
   def test_generate_step_greedy
     model = DummyModel.new(vocab_size: 10, num_layers: 2)
-    prompt = @mx.array([1, 2]).astype(@mx.uint32)
+    prompt = @mx.array([1, 2], dtype: @mx.uint32)
 
     tokens = []
     MlxLm::Generate.generate_step(prompt, model, max_tokens: 5).each do |token, logprobs|
@@ -210,7 +210,7 @@ class Phase4GenerateTest < Minitest::Test
   # Test 11: generate_step respects max_tokens
   def test_generate_step_max_tokens
     model = DummyModel.new(vocab_size: 10, num_layers: 2)
-    prompt = @mx.array([1]).astype(@mx.uint32)
+    prompt = @mx.array([1], dtype: @mx.uint32)
 
     tokens = []
     MlxLm::Generate.generate_step(prompt, model, max_tokens: 3).each do |token, _|
@@ -223,10 +223,10 @@ class Phase4GenerateTest < Minitest::Test
   # Test 12: generate_step with custom sampler
   def test_generate_step_custom_sampler
     model = DummyModel.new(vocab_size: 10, num_layers: 2)
-    prompt = @mx.array([1, 2]).astype(@mx.uint32)
+    prompt = @mx.array([1, 2], dtype: @mx.uint32)
 
     # Custom sampler that always picks token 7
-    custom_sampler = ->(_logprobs) { @mx.array([7]).astype(@mx.int32) }
+    custom_sampler = ->(_logprobs) { @mx.array([7], dtype: @mx.int32) }
 
     tokens = []
     MlxLm::Generate.generate_step(prompt, model, max_tokens: 3, sampler: custom_sampler).each do |token, _|

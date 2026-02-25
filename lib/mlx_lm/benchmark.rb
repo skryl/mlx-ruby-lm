@@ -6,9 +6,8 @@ module MlxLm
     def measure_generation(model, prompt_tokens: 32, gen_tokens: 64, vocab_size: 32000)
       mx = MLX::Core
 
-      # Create random prompt tokens (generate float then cast to int)
-      prompt = mx.random_uniform([prompt_tokens], 0.0, (vocab_size - 1).to_f, mx.float32)
-      prompt = prompt.astype(mx.int32)
+      # Create random prompt tokens
+      prompt = mx.random_uniform([prompt_tokens], 0.0, (vocab_size - 1).to_f, mx.float32).astype(mx.int32)
       mx.eval(prompt)
 
       # Create cache

@@ -35,7 +35,7 @@ module MlxLm
           mx = MLX::Core
           # RMS normalization: x / sqrt(mean(x^2) + eps) * (1 + weight)
           x_sq = x * x
-          mean_sq = mx.expand_dims(mx.mean(x_sq, -1), -1)
+          mean_sq = mx.mean(x_sq, -1, keepdims: true)
           norm = x * mx.rsqrt(mean_sq + @eps)
           norm * (weight + 1.0)
         end

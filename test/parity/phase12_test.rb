@@ -50,7 +50,7 @@ class Phase12PromptCacheTest < Minitest::Test
 
       # Create cache and populate it
       cache = MlxLm::Cache.make_prompt_cache(model)
-      input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+      input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
       model.call(input, cache: cache)
       @mx.eval(*cache.map(&:state).flatten.compact)
 
@@ -94,7 +94,7 @@ class Phase12PerplexityTest < Minitest::Test
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
     # Compute perplexity on a small sequence
-    tokens = @mx.array([1, 2, 3, 4, 5, 6, 7, 8]).astype(@mx.int32)
+    tokens = @mx.array([1, 2, 3, 4, 5, 6, 7, 8], dtype: @mx.int32)
     ppl = MlxLm::Perplexity.compute(model, tokens)
     assert ppl > 0, "Perplexity should be positive, got #{ppl}"
     assert ppl.is_a?(Numeric), "Perplexity should be numeric"
@@ -115,7 +115,7 @@ class Phase12PerplexityTest < Minitest::Test
     model = MlxLm::Models::Llama::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    tokens = @mx.array([1, 2, 3, 4, 5]).astype(@mx.int32)
+    tokens = @mx.array([1, 2, 3, 4, 5], dtype: @mx.int32)
     ll = MlxLm::Perplexity.log_likelihood(model, tokens)
     assert ll < 0, "Log-likelihood should be negative, got #{ll}"
   end

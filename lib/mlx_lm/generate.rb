@@ -71,7 +71,7 @@ module MlxLm
       }
 
       # Prompt prefilling - process prompt in chunks
-      prompt_arr = prompt.is_a?(::Array) ? mx.array(prompt).astype(mx.uint32) : prompt
+      prompt_arr = prompt.is_a?(::Array) ? mx.array(prompt, dtype: mx.uint32) : prompt
       total_prompt_tokens = prompt_arr.size
 
       # Process prompt chunks (all but last token)
@@ -115,7 +115,7 @@ module MlxLm
         if prompt.is_a?(String)
           prompt = tokenizer.encode(prompt)
         end
-        prompt = MLX::Core.array(prompt).astype(MLX::Core.uint32)
+        prompt = MLX::Core.array(prompt, dtype: MLX::Core.uint32)
       end
 
       detokenizer = tokenizer.detokenizer

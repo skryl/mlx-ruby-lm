@@ -26,7 +26,7 @@ class Phase11OLMo2Test < Minitest::Test
     model = MlxLm::Models::OLMo2::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape
@@ -81,7 +81,7 @@ class Phase11GPTNeoXTest < Minitest::Test
     model = MlxLm::Models::GPTNeoX::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape
@@ -102,7 +102,7 @@ class Phase11GPTNeoXTest < Minitest::Test
     model = MlxLm::Models::GPTNeoX::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape
@@ -138,7 +138,7 @@ class Phase11MixtralTest < Minitest::Test
     model = MlxLm::Models::Mixtral::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape
@@ -192,7 +192,7 @@ class Phase11DeepSeekTest < Minitest::Test
     model = MlxLm::Models::DeepSeek::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape
@@ -218,7 +218,7 @@ class Phase11DeepSeekTest < Minitest::Test
     model = MlxLm::Models::DeepSeek::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape
@@ -253,7 +253,7 @@ class Phase11InternLM2Test < Minitest::Test
     model = MlxLm::Models::InternLM2::Model.new(args)
     @mx.eval(*MLX::Utils.tree_flatten(model.parameters).map { |_, v| v })
 
-    input = @mx.array([[1, 2, 3]]).astype(@mx.int32)
+    input = @mx.array([[1, 2, 3]], dtype: @mx.int32)
     output = model.call(input)
     @mx.eval(output)
     assert_equal [1, 3, 128], output.shape

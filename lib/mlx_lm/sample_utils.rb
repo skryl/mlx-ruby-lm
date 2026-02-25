@@ -51,7 +51,7 @@ module MlxLm
       mask_idx = mx.argpartition(neg_logprobs, top_k - 1, -1)
       # Get indices after top_k (the ones to mask)
       rest = mx.split(mask_idx, [top_k], -1)[1]
-      neg_inf = mx.array([-Float::INFINITY]).astype(logprobs.dtype)
+      neg_inf = mx.array([-Float::INFINITY], dtype: logprobs.dtype)
       mx.put_along_axis(logprobs, rest, neg_inf, -1)
     end
 
@@ -73,7 +73,7 @@ module MlxLm
       # Mask tokens below threshold
       tokens_to_remove = mx.less(sorted_logprobs, scaled_min_p)
 
-      neg_inf = mx.array(-Float::INFINITY).astype(sorted_logprobs.dtype)
+      neg_inf = mx.array(-Float::INFINITY, dtype: sorted_logprobs.dtype)
       selected_logprobs = mx.where(tokens_to_remove, neg_inf, sorted_logprobs)
 
       # Restore the top min_tokens_to_keep tokens regardless
@@ -113,9 +113,9 @@ module MlxLm
       cumulative_probs = mx.take_along_axis(cumulative_probs, inverse_indices, -1)
 
       # select tokens with cumulative probs above threshold
-      threshold = mx.array(1.0 - top_p).astype(cumulative_probs.dtype)
+      threshold = mx.array(1.0 - top_p, dtype: cumulative_probs.dtype)
       mask = mx.greater(cumulative_probs, threshold)
-      neg_inf = mx.array(-Float::INFINITY).astype(logprobs.dtype)
+      neg_inf = mx.array(-Float::INFINITY, dtype: logprobs.dtype)
       mx.where(mask, logprobs, neg_inf)
     end
 
@@ -138,11 +138,11 @@ module MlxLm
             []
           end
           if recent.length > 0
-            token_indices = mx.array(recent).astype(mx.int32)
+            token_indices = mx.array(recent, dtype: mx.int32)
             n_tokens = recent.length
             idx_2d = token_indices.reshape([1, n_tokens])
             selected_logits = mx.take_along_axis(logits, idx_2d, -1)
-            zero = mx.array(0.0).astype(selected_logits.dtype)
+            zero = mx.array(0.0, dtype: selected_logits.dtype)
             is_negative = mx.less(selected_logits, zero)
             selected_logits = mx.where(
               is_negative,
