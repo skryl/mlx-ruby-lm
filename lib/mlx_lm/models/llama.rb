@@ -206,6 +206,9 @@ module MlxLm
           end
         end
       end
+
+      # Register in model registry
+      Models.register("llama", Model, ModelArgs)
     end
   end
 end
