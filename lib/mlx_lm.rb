@@ -26,6 +26,9 @@ require_relative "mlx_lm/tuner/lora"
 require_relative "mlx_lm/chat_template"
 require_relative "mlx_lm/cli"
 require_relative "mlx_lm/server"
+require_relative "mlx_lm/perplexity"
+require_relative "mlx_lm/benchmark"
+require_relative "mlx_lm/convert_utils"
 
 module MlxLm
 end

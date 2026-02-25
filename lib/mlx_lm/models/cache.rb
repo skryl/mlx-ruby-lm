@@ -102,5 +102,65 @@ module MlxLm
         Array.new(num_layers) { KVCache.new }
       end
     end
+
+    def save_prompt_cache(path, cache)
+      mx = MLX::Core
+      tensors = {}
+
+      cache.each_with_index do |layer_cache, i|
+        keys, values = layer_cache.state
+        next unless keys
+
+        mx.eval(keys, values)
+        tensors["layer.#{i}.keys"] = keys
+        tensors["layer.#{i}.values"] = values
+      end
+
+      # Also save metadata
+      tensors["_meta_offsets"] = mx.array(cache.map(&:offset), mx.int32)
+
+      # Serialize using safetensors gem
+      st_tensors = {}
+      tensors.each do |name, arr|
+        arr = arr.astype(mx.float32) unless [mx.float32, mx.int32].include?(arr.dtype)
+        mx.eval(arr)
+        data = arr.tolist
+        data = data.flatten if data.is_a?(::Array) && data.first.is_a?(::Array)
+        data = [data].flatten
+
+        if arr.dtype == mx.int32
+          binary = data.map(&:to_i).pack("l<*")
+          st_tensors[name] = { "dtype" => "int32", "shape" => arr.shape, "data" => binary }
+        else
+          binary = data.pack("e*")
+          st_tensors[name] = { "dtype" => "float32", "shape" => arr.shape, "data" => binary }
+        end
+      end
+
+      File.binwrite(path, Safetensors.serialize(st_tensors))
+    end
+
+    def load_prompt_cache(path, model)
+      loaded = WeightUtils.load_safetensors(path)
+      mx = MLX::Core
+
+      offsets = loaded["_meta_offsets"]
+      mx.eval(offsets)
+      offset_list = offsets.tolist
+      offset_list = [offset_list].flatten
+
+      num_layers = model.layers.length
+      cache = Array.new(num_layers) { KVCache.new }
+
+      num_layers.times do |i|
+        keys = loaded["layer.#{i}.keys"]
+        values = loaded["layer.#{i}.values"]
+        next unless keys
+
+        cache[i].state = [keys, values]
+      end
+
+      cache
+    end
   end
 end
