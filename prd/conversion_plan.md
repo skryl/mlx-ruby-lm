@@ -591,3 +591,62 @@ bundle exec rake test:parity_report
 
 6. **Progressive testing** — Every phase is independently testable. Earlier phases
    don't depend on later phases being complete.
+
+---
+
+## MLX-Ruby Gaps & Workarounds
+
+The following issues were discovered during implementation. Each required a
+workaround in the `mlx-ruby-lm` codebase.
+
+### API Issues
+
+| # | Issue | Severity | Workaround |
+|---|-------|----------|------------|
+| 1 | `mx.array(values, dtype: ...)` raises `ArgumentError` — the `dtype:` keyword is rejected even though the error message says it accepts `Dtype`, symbol, or string | High | Create float32 array first, then `.astype(mx.int32)` etc. |
+| 2 | `mx.mean(x, axis, keepdims: true)` not supported — no `keepdims` parameter on `mean` | Medium | `mx.expand_dims(mx.mean(x, axis), -1)` |
+| 3 | `MLX::NN::Dropout.new(p: 0.5)` rejects keyword arg — constructor only accepts positional `Dropout.new(0.5)` | Low | Use positional argument |
+| 4 | `mx.random_uniform` only works with float dtypes — passing `mx.int32` raises error | Low | Generate as float32, then `.astype(mx.int32)` |
+| 5 | `mx.save_safetensors` not available — MLX not compiled with `MLX_BUILD_SAFETENSORS=ON` | Medium | Use Ruby `safetensors` gem for serialization |
+| 6 | No `SwitchGLU` layer — Python mlx-lm uses it for efficient stacked MoE experts | Medium | Per-token expert routing loop (functional but slower) |
+
+### Ruby ↔ MLX Coercion Issues
+
+| # | Issue | Severity | Workaround |
+|---|-------|----------|------------|
+| 7 | `Float * MLX::Array` raises `TypeError` — Ruby `Float#*` can't coerce MLX arrays | High | Always put MLX array on the left: `array * scalar` |
+| 8 | `Float + MLX::Array` raises `TypeError` — same coercion issue with addition | High | `array + scalar` instead of `scalar + array` |
+| 9 | No unary negation `-array` | Low | `MLX::Core.negative(array)` |
+| 10 | No comparison operators `>`, `<` on arrays | Low | `MLX::Core.greater()`, `MLX::Core.less()` |
+
+### NN Module System
+
+| # | Issue | Severity | Workaround |
+|---|-------|----------|------------|
+| 11 | Instance variables invisible to Module traversal — `@x = Module.new(...)` doesn't register children in `@state`, so `children`, `leaf_modules`, `parameters`, `load_weights`, and `nn.quantize` all miss them | **Critical** | Must use `self.x = Module.new(...)` (goes through `method_missing` → `@state`) for every child module in every model. Required refactoring all model files. |
+| 12 | `update_modules_impl` missing Module→Hash recursion — when `nn.quantize` replaces layers, the code didn't handle `current_value=Module` + `new_value=Hash` | High | Patched `mlx-ruby/lib/mlx/nn/base.rb` to add `elsif current_value.is_a?(Module) && (new_value.is_a?(Hash) \|\| new_value.is_a?(Array))` branch for recursive descent. |
+
+### Safetensors Gem Compatibility
+
+| # | Issue | Severity | Workaround |
+|---|-------|----------|------------|
+| 13 | Dtype string format mismatch — Ruby `safetensors` gem v0.2.2 expects lowercase `"float32"` for serialization but returns uppercase `"F32"` on deserialization | Medium | `weight_utils.rb` accepts both formats: `dtype_str == "F32" \|\| dtype_str == "float32"` |
+
+### Impact Summary
+
+- **Issues 7, 8, 11** were the most pervasive — they affected every model file and
+  many utility modules. Issue 11 alone required rewriting every constructor in every
+  model architecture.
+- **Issue 12** required patching mlx-ruby itself (the only upstream change).
+- **Issue 1** affected any code path that creates typed arrays from Ruby values.
+- **Issues 9, 10** are minor and only arise in specific model architectures.
+
+### Recommendations for mlx-ruby Upstream
+
+1. Fix `mx.array(values, dtype:)` to accept dtype keyword argument
+2. Add `keepdims:` parameter to reduction ops (`mean`, `sum`, etc.)
+3. Implement Ruby `coerce` on `MLX::Core::Array` so `Float * array` works
+4. Compile with `MLX_BUILD_SAFETENSORS=ON` by default
+5. Add `SwitchGLU` layer for MoE model support
+6. Document the `self.x =` vs `@x =` requirement for Module children prominently
+
