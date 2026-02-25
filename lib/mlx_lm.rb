@@ -18,6 +18,9 @@ require_relative "mlx_lm/generate"
 require_relative "mlx_lm/quantize"
 require_relative "mlx_lm/load_utils"
 require_relative "mlx_lm/tuner/lora"
+require_relative "mlx_lm/chat_template"
+require_relative "mlx_lm/cli"
+require_relative "mlx_lm/server"
 
 module MlxLm
 end
