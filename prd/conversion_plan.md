@@ -649,4 +649,46 @@ workaround in the `mlx-ruby-lm` codebase.
 4. Compile with `MLX_BUILD_SAFETENSORS=ON` by default
 5. Add `SwitchGLU` layer for MoE model support
 6. Document the `self.x =` vs `@x =` requirement for Module children prominently
+7. Apply the `update_modules_impl` fix below (Issue 12)
+
+### Required Upstream Patch: `update_modules_impl` (Issue 12)
+
+**File:** `lib/mlx/nn/base.rb`
+
+When `nn.quantize` (or any `update_modules` call) replaces layers in a model,
+it builds a nested Hash/Array tree of replacement modules. The existing code
+handles `Module→Module` replacement and `Hash/Array→Hash/Array` recursion, but
+misses the case where the current value is a `Module` and the replacement is a
+`Hash` or `Array` (meaning "recurse into this Module's children"). Without this
+fix, `nn.quantize` fails with `"Received invalid type: Hash"`.
+
+**Patch** (against commit `148f658`):
+
+```diff
+--- a/lib/mlx/nn/base.rb
++++ b/lib/mlx/nn/base.rb
+@@ -323,6 +323,8 @@ module MLX
+               current_value = dst[k]
+               if current_value.is_a?(Module) && new_value.is_a?(Module)
+                 dst[k] = new_value
++              elsif current_value.is_a?(Module) && (new_value.is_a?(Hash) || new_value.is_a?(Array))
++                update_modules_impl(current_value, new_value, strict)
+               elsif current_value.is_a?(Hash) || current_value.is_a?(Array)
+                 update_modules_impl(current_value, new_value, strict)
+               elsif strict && new_value != {}
+@@ -337,6 +339,8 @@ module MLX
+             current_value = dst[i]
+             if current_value.is_a?(Module) && new_value.is_a?(Module)
+               dst[i] = new_value
++            elsif current_value.is_a?(Module) && (new_value.is_a?(Hash) || new_value.is_a?(Array))
++              update_modules_impl(current_value, new_value, strict)
+             elsif current_value.is_a?(Hash) || current_value.is_a?(Array)
+               update_modules_impl(current_value, new_value, strict)
+             elsif strict && new_value != {}
+```
+
+This adds two `elsif` branches (one in the Hash iteration, one in the Array
+iteration) that detect when a Module needs recursive descent rather than
+direct replacement. The fix has been applied locally in the `mlx-ruby`
+submodule at commit `85afc8a`.
 
