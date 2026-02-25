@@ -4,3 +4,4 @@
 [submodule "mlx-ruby"]
 	path = mlx-ruby
 	url = https://github.com/skryl/mlx-ruby.git
+	ignore = dirty
