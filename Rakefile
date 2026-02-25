@@ -12,4 +12,16 @@ namespace :test do
   end
 end
 
+namespace :parity do
+  desc "Regenerate the Python/Ruby parity inventory snapshot"
+  task :inventory do
+    ruby "scripts/generate_parity_inventory.rb"
+  end
+
+  desc "Verify the parity inventory snapshot is up-to-date"
+  task :inventory_check do
+    ruby "scripts/generate_parity_inventory.rb", "--check"
+  end
+end
+
 task default: :test

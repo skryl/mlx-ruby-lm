@@ -1,26 +1,36 @@
 PATH
   remote: .
   specs:
-    mlx (0.30.7.4)
     mlx-ruby-lm (0.30.7.1)
       mlx (~> 0.1)
       safetensors (~> 0.2)
       tokenizers (~> 0.6)
 
+PATH
+  remote: mlx-ruby
+  specs:
+    mlx (0.30.7.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    minitest (5.20.0)
+    minitest (5.27.0)
+    ostruct (0.6.3)
     rake (13.1.0)
+    safetensors (0.2.2-arm64-darwin)
     safetensors (0.2.2-x86_64-linux)
+    tokenizers (0.6.3-arm64-darwin)
     tokenizers (0.6.3-x86_64-linux)
 
 PLATFORMS
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
   minitest (~> 5.20)
+  mlx!
   mlx-ruby-lm!
+  ostruct
   rake (~> 13.0)
 
 BUNDLED WITH
