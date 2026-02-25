@@ -1,14 +1,33 @@
+require_relative "lib/mlx_lm/version"
+
 Gem::Specification.new do |s|
   s.name        = "mlx-ruby-lm"
-  s.version     = File.read(File.expand_path("lib/mlx_lm/version.rb", __dir__))[/VERSION\s*=\s*"(.+?)"/, 1]
+  s.version     = MlxLm::VERSION
   s.summary     = "LLM inference and fine-tuning on MLX for Ruby"
-  s.description = "A Ruby port of mlx-lm providing large language model inference and fine-tuning built on the mlx gem."
-  s.authors     = ["MLX Ruby Contributors"]
+  s.description = "A Ruby port of mlx-lm providing large language model inference, " \
+                  "quantization, LoRA fine-tuning, and an OpenAI-compatible server " \
+                  "built on the mlx gem. Supports Llama, Gemma, Qwen2, Phi3, Mixtral, " \
+                  "DeepSeek, and many more architectures."
+  s.authors     = ["Alex Skryl"]
+  s.email       = ["rut216@gmail.com"]
+  s.homepage    = "https://github.com/skryl/mlx-ruby-lm"
   s.license     = "MIT"
-  s.required_ruby_version = ">= 3.3"
+  s.required_ruby_version = ">= 3.1"
 
-  s.files = Dir["lib/**/*.rb"]
+  s.metadata = {
+    "homepage_uri" => s.homepage,
+    "source_code_uri" => "https://github.com/skryl/mlx-ruby-lm",
+    "changelog_uri" => "https://github.com/skryl/mlx-ruby-lm/blob/main/CHANGELOG.md",
+  }
 
-  s.add_dependency "safetensors", ">= 0.2"
-  s.add_dependency "tokenizers", ">= 0.6"
+  s.files = Dir.chdir(__dir__) do
+    Dir["{lib,exe}/**/*", "LICENSE.txt", "README.md"]
+  end
+  s.bindir = "exe"
+  s.executables = s.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  s.require_paths = ["lib"]
+
+  s.add_dependency "mlx", "~> 0.1"
+  s.add_dependency "safetensors", "~> 0.2"
+  s.add_dependency "tokenizers", "~> 0.6"
 end

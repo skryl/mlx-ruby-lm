@@ -1,3 +1,3 @@
 module MlxLm
-  VERSION = "0.1.0"
+  VERSION = "0.30.7.1"
 end
