@@ -1,0 +1,32 @@
+PATH
+  remote: .
+  specs:
+    mlx-ruby-lm (0.1.0)
+      safetensors (>= 0.2)
+      tokenizers (>= 0.6)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.20.0)
+    rake (13.1.0)
+    safetensors (0.2.2-x86_64-linux)
+    tokenizers (0.6.3-x86_64-linux)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  minitest (~> 5.20)
+  mlx-ruby-lm!
+  rake (~> 13.0)
+
+CHECKSUMS
+  minitest (5.20.0)
+  mlx-ruby-lm (0.1.0)
+  rake (13.1.0)
+  safetensors (0.2.2-x86_64-linux)
+  tokenizers (0.6.3-x86_64-linux)
+
+BUNDLED WITH
+  4.0.6
