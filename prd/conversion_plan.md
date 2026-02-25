@@ -650,6 +650,62 @@ workaround in the `mlx-ruby-lm` codebase.
 5. Add `SwitchGLU` layer for MoE model support
 6. Document the `self.x =` vs `@x =` requirement for Module children prominently
 7. Apply the `update_modules_impl` fix below (Issue 12)
+8. Add `GreaterEqual` to the mlx-onnx IR lowering pass (Issue 14 below)
+
+### Required Upstream: ONNX Export — Missing Ops & Tracer Limitations (Issue 14)
+
+Tested all 13 model architectures for ONNX export via `MLX::ONNX.export_onnx`.
+**0/13 models export successfully.** The test file is at `test/parity/onnx_export_test.rb`.
+
+#### Category 1: Missing `GreaterEqual` op (11 dense models)
+
+All dense (non-MoE) models fail on a single missing ONNX lowering:
+**`GreaterEqual`**, used in the causal attention mask (`>=` comparison).
+
+| Model | Total Nodes | Supported | Coverage | Missing Ops |
+|-------|-------------|-----------|----------|-------------|
+| llama | 255 | 253 | 99.2% | `GreaterEqual` |
+| gemma | 266 | 264 | 99.2% | `GreaterEqual` |
+| gemma2 | 353 | 351 | 99.4% | `GreaterEqual` |
+| qwen2 | 261 | 259 | 99.2% | `GreaterEqual` |
+| phi3 | 243 | 241 | 99.2% | `GreaterEqual` |
+| starcoder2 | 298 | 296 | 99.3% | `GreaterEqual` |
+| stablelm | 289 | 287 | 99.3% | `GreaterEqual` |
+| cohere | 267 | 265 | 99.3% | `GreaterEqual` |
+| olmo2 | 293 | 291 | 99.3% | `GreaterEqual` |
+| gpt_neox | 264 | 262 | 99.2% | `GreaterEqual` |
+| internlm2 | 245 | 243 | 99.2% | `GreaterEqual` |
+
+**Fix:** Add `GreaterEqual` → ONNX `GreaterOrEqual` mapping to `mlx-onnx`'s
+IR lowering pass. This single op blocks every dense model — only 2 unsupported
+nodes out of 240–350 per model. Once added, all 11 dense models should export.
+
+#### Category 2: Tracer crash — SIGILL (2 MoE models)
+
+| Model | Signal | Root Cause |
+|-------|--------|------------|
+| mixtral | SIGILL | `inds.tolist` in `SparseMoeBlock#call` forces materialization during tracing |
+| deepseek | SIGILL | `inds.tolist` in `DeepseekMoE#call` forces materialization during tracing |
+
+Both MoE models use per-token expert routing with `inds.tolist` to extract
+expert indices into Ruby arrays, creating **data-dependent control flow** that
+the ONNX graph tracer cannot follow. The process crashes (SIGILL) before even
+the compatibility report can complete.
+
+**Fix options:**
+1. **(Preferred) Upstream:** Add `SwitchGLU` or a vectorized MoE dispatch
+   primitive to mlx-ruby so expert routing can be expressed as pure tensor ops
+   (no Ruby-level iteration over `tolist` indices).
+2. **(Workaround) Model-level:** Rewrite the MoE `call` methods to avoid
+   `tolist` — e.g., use `mx.take` / `mx.scatter` / masked computation so the
+   entire routing graph stays in MLX and is traceable.
+
+#### Priority
+
+| Priority | Action | Impact |
+|----------|--------|--------|
+| **P0** | Add `GreaterEqual` to mlx-onnx | Unblocks all 11 dense model architectures |
+| **P1** | Vectorized MoE dispatch (no tolist) | Unblocks mixtral + deepseek ONNX export |
 
 ### Required Upstream Patch: `update_modules_impl` (Issue 12)
 
