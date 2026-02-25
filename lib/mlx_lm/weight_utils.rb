@@ -51,8 +51,8 @@ module MlxLm
       dtype_str = info["dtype"]
       data = info["data"]
 
-      # For F32, unpack as little-endian floats
-      if dtype_str == "F32"
+      # For F32/float32, unpack as little-endian floats
+      if dtype_str == "F32" || dtype_str == "float32"
         values = data.unpack("e*")
         mx.array(values).reshape(shape)
       elsif dtype_str == "F16"

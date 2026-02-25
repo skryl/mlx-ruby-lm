@@ -17,6 +17,7 @@ require_relative "mlx_lm/models/gemma2"
 require_relative "mlx_lm/generate"
 require_relative "mlx_lm/quantize"
 require_relative "mlx_lm/load_utils"
+require_relative "mlx_lm/tuner/lora"
 
 module MlxLm
 end
