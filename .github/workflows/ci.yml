@@ -8,9 +8,17 @@ on:
 
 jobs:
   test:
-    name: Full Test Suite
-    runs-on: macos-14
+    name: Full Test Suite (${{ matrix.os }}, Ruby ${{ matrix.ruby }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-14
+        ruby:
+          - "4.0.1"
 
     steps:
       - name: Checkout
@@ -21,7 +29,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - name: Run all tests

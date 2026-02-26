@@ -23,6 +23,7 @@ GEM
     tokenizers (0.6.3-x86_64-linux)
 
 PLATFORMS
+  arm64-darwin-23
   arm64-darwin-25
   x86_64-linux
 
