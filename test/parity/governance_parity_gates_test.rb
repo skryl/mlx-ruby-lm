@@ -2,23 +2,19 @@
 
 require_relative "../test_helper"
 require "open3"
+require_relative "../../tasks/parity_inventory_task"
 
 class Phase13GovernanceGatesTest < Minitest::Test
   MIN_MLX_ONNX_SHA = "33d4b2eed2aa342f0836298dda60b6c5eb011b0f"
-  INVENTORY_SCRIPT = File.expand_path("../../scripts/generate_parity_inventory.rb", __dir__)
   MLX_ONNX_DIR = File.expand_path("../../mlx-ruby/submodules/mlx-onnx", __dir__)
 
   def test_parity_inventory_snapshot_is_current
-    out, err, status = Open3.capture3("ruby", INVENTORY_SCRIPT, "--check")
-
     message = <<~MSG
       parity inventory snapshot is stale.
-      regenerate with: ruby scripts/generate_parity_inventory.rb
-      stdout: #{out}
-      stderr: #{err}
+      regenerate with: bundle exec rake parity:inventory
     MSG
 
-    assert status.success?, message
+    assert ParityInventoryTask.run!(check: true), message
   end
 
   def test_mlx_onnx_submodule_meets_minimum_onnx_commit
