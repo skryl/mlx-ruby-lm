@@ -62,11 +62,15 @@ end
 def build_snapshot
   py_all = model_files(PY_MODELS_DIR, "py")
   py_arch = py_all - PY_INFRA_FILES
+  py_arch_keys = py_arch.map { |name| name.sub(/\.py\z/, "") }
 
   rb_all = model_files(RB_MODELS_DIR, "rb")
   rb_arch = rb_all - RB_INFRA_FILES
+  rb_arch_keys = rb_arch.map { |name| name.sub(/\.rb\z/, "") }
   rb_registered = parse_registered_model_keys
   remappings = parse_remappings
+  missing_architecture_files = (py_arch_keys - rb_registered).sort
+  extra_registered_model_keys = (rb_registered - py_arch_keys).sort
 
   {
     "inventory_version" => 1,
@@ -86,13 +90,18 @@ def build_snapshot
       "shared_infra_files" => RB_INFRA_FILES,
       "architecture_files_total" => rb_arch.length,
       "architecture_files" => rb_arch,
+      "architecture_model_keys_total" => rb_arch_keys.length,
+      "architecture_model_keys" => rb_arch_keys,
       "registered_model_keys_total" => rb_registered.length,
       "registered_model_keys" => rb_registered,
       "remappings_total" => remappings.length,
       "remappings" => remappings
     },
     "parity" => {
-      "missing_architecture_file_count" => [py_arch.length - rb_registered.length, 0].max
+      "missing_architecture_file_count" => missing_architecture_files.length,
+      "missing_architecture_files" => missing_architecture_files,
+      "extra_registered_model_keys_count" => extra_registered_model_keys.length,
+      "extra_registered_model_keys" => extra_registered_model_keys
     }
   }
 end

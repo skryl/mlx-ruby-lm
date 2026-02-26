@@ -7,6 +7,7 @@ module MlxLm
     # Remapping for architectures that share implementation
     REMAPPING = {
       "mistral" => "llama",
+      "falcon_mamba" => "mamba",
     }.freeze
 
     module_function
