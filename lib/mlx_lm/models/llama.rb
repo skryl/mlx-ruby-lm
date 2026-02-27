@@ -91,7 +91,6 @@ module MlxLm
         end
 
         def call(x)
-          mx = MLX::Core
           down_proj.call(MLX::NN.silu(gate_proj.call(x)) * up_proj.call(x))
         end
       end
@@ -123,7 +122,6 @@ module MlxLm
         end
 
         def call(inputs, cache: nil)
-          mx = MLX::Core
           h = embed_tokens.call(inputs)
           layer_cache = cache || [nil] * layers.length
 
@@ -139,7 +137,6 @@ module MlxLm
         private
 
         def _create_attention_mask(h, cache)
-          mx = MLX::Core
           n = h.shape[1]
           return nil if n == 1
           "causal"

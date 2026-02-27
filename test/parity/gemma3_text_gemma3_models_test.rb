@@ -11,7 +11,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/gemma3_text"
 require_relative "../../lib/mlx_lm/models/gemma3"
 
-class Phase20DenseLaneQGemma3TextTest < Minitest::Test
+class Gemma3TextGemma3ModelsGemma3TextTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -65,7 +65,7 @@ class Phase20DenseLaneQGemma3TextTest < Minitest::Test
   end
 end
 
-class Phase20DenseLaneQGemma3Test < Minitest::Test
+class Gemma3TextGemma3ModelsGemma3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -116,7 +116,7 @@ class Phase20DenseLaneQGemma3Test < Minitest::Test
   end
 end
 
-class Phase20DenseLaneQRegistryTest < Minitest::Test
+class Gemma3TextGemma3ModelsTest < Minitest::Test
   def test_models_registered_and_resolvable
     assert MlxLm::Models::REGISTRY.key?("gemma3_text"), "gemma3_text should be registered"
     assert MlxLm::Models::REGISTRY.key?("gemma3"), "gemma3 should be registered"

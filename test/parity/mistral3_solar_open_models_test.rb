@@ -10,7 +10,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/mistral3"
 require_relative "../../lib/mlx_lm/models/solar_open"
 
-class Phase19DenseLanePMistral3Test < Minitest::Test
+class Mistral3SolarOpenModelsMistral3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -59,7 +59,7 @@ class Phase19DenseLanePMistral3Test < Minitest::Test
   end
 end
 
-class Phase19DenseLanePSolarOpenTest < Minitest::Test
+class Mistral3SolarOpenModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -122,7 +122,7 @@ class Phase19DenseLanePSolarOpenTest < Minitest::Test
   end
 end
 
-class Phase19DenseLanePRegistryTest < Minitest::Test
+class Mistral3SolarOpenModelsModelsRegisteredAndResolvableTest < Minitest::Test
   def test_models_registered_and_resolvable
     assert MlxLm::Models::REGISTRY.key?("mistral3"), "mistral3 should be registered"
     assert MlxLm::Models::REGISTRY.key?("solar_open"), "solar_open should be registered"

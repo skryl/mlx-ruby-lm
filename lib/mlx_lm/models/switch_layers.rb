@@ -181,6 +181,10 @@ module MlxLm
         end
       end
 
+      # Python name compatibility alias.
+      class SwiGLU < SwitchGLU
+      end
+
       # Batched expert MLP with configurable activation.
       class SwitchMLP < MLX::NN::Module
         def initialize(input_dims, hidden_dims, num_experts, activation: nil, bias: false)

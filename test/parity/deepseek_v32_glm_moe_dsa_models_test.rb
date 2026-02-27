@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/deepseek"
 require_relative "../../lib/mlx_lm/models/deepseek_v32"
 require_relative "../../lib/mlx_lm/models/glm_moe_dsa"
 
-class Phase22DenseLaneZDeepseekV32Test < Minitest::Test
+class DeepseekV32GlmMoeDsaModelsV32Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -68,7 +68,7 @@ class Phase22DenseLaneZDeepseekV32Test < Minitest::Test
   end
 end
 
-class Phase22DenseLaneZGlmMoeDsaTest < Minitest::Test
+class DeepseekV32GlmMoeDsaModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -128,7 +128,7 @@ class Phase22DenseLaneZGlmMoeDsaTest < Minitest::Test
   end
 end
 
-class Phase22DenseLaneZRegistryTest < Minitest::Test
+class DeepseekV32GlmMoeDsaModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("deepseek_v32"), "deepseek_v32 should be registered"
     assert MlxLm::Models::REGISTRY.key?("glm_moe_dsa"), "glm_moe_dsa should be registered"

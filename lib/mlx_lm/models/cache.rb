@@ -174,6 +174,11 @@ module MlxLm
     end
   end
 
+  # Compatibility alias for Python ConcatenateKVCache semantics.
+  # In Ruby we already append via KVCache#update_and_fetch.
+  class ConcatenateKVCache < KVCache
+  end
+
   # Rotating KV Cache — fixed maximum size, old entries rotate out.
   class RotatingKVCache < BaseCache
     attr_reader :offset
@@ -508,6 +513,16 @@ module MlxLm
 
       MLX::Core.array(indices, dtype: MLX::Core.int32)
     end
+  end
+
+  # Batch cache wrappers used by Python batch generation paths.
+  class BatchKVCache < ArraysCache
+    def initialize(size, left_padding: nil)
+      super(size, left_padding: left_padding)
+    end
+  end
+
+  class BatchRotatingKVCache < BatchKVCache
   end
 
   class ChunkedKVCache < BaseCache

@@ -1,8 +1,7 @@
 require_relative "../test_helper"
 
-# Phase 9: LoRA & Fine-Tuning
 # Tests LoRA layers, model application, training step, and adapter save/load.
-class Phase9LoRATest < Minitest::Test
+class LoraLayersTrainingTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -143,7 +142,7 @@ class Phase9LoRATest < Minitest::Test
     })
 
     x = @mx.ones([1, 4]).astype(@mx.float32)
-    loss, grads = loss_fn.call(lora, x)
+    loss, _grads = loss_fn.call(lora, x)
     @mx.eval(loss)
     assert loss.item.is_a?(Numeric), "Loss should be a number"
   end

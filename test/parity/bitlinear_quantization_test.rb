@@ -1,7 +1,7 @@
 require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/bitlinear_layers"
 
-class Phase15DummyBitnetBlock < MLX::NN::Module
+class BitlinearQuantizationBlock < MLX::NN::Module
   def initialize
     super()
     self.keep = MLX::NN::Linear.new(4, 6, bias: true)
@@ -9,15 +9,15 @@ class Phase15DummyBitnetBlock < MLX::NN::Module
   end
 end
 
-class Phase15DummyBitnetModel < MLX::NN::Module
+class BitlinearQuantizationModel < MLX::NN::Module
   def initialize
     super()
-    self.block = Phase15DummyBitnetBlock.new
+    self.block = BitlinearQuantizationBlock.new
     self.head = MLX::NN::Linear.new(4, 3, bias: false)
   end
 end
 
-class Phase15BitLinearTest < Minitest::Test
+class BitlinearQuantizationTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -87,7 +87,7 @@ class Phase15BitLinearTest < Minitest::Test
   end
 
   def test_bitnet_quantize_replaces_linear_layers_with_skip_list_support
-    model = Phase15DummyBitnetModel.new
+    model = BitlinearQuantizationModel.new
     converted = MlxLm::Models.bitnet_quantize(
       model,
       {
@@ -111,7 +111,7 @@ class Phase15BitLinearTest < Minitest::Test
   end
 
   def test_bitnet_quantize_defaults_to_inverted_weight_scales
-    model = Phase15DummyBitnetModel.new
+    model = BitlinearQuantizationModel.new
     MlxLm::Models.bitnet_quantize(model, {})
 
     assert_instance_of MlxLm::Models::BitLinear, model.block.keep

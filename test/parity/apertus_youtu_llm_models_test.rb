@@ -12,12 +12,12 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/apertus"
 require_relative "../../lib/mlx_lm/models/youtu_llm"
 
-class Phase18DenseLaneKApertusTest < Minitest::Test
+class ApertusYoutuLlmModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
 
-  def test_apertus_construct_forward_shape_and_registry_resolution
+  def test_apertus_construct_forward_shape_and_registration_resolution
     args = MlxLm::Models::Apertus::ModelArgs.from_dict({
       "model_type" => "apertus",
       "hidden_size" => 32,
@@ -53,12 +53,12 @@ class Phase18DenseLaneKApertusTest < Minitest::Test
   end
 end
 
-class Phase18DenseLaneKYoutuLLMTest < Minitest::Test
+class ApertusYoutuLlmModelsYoutuLlmConstructForwardShapeAndResolutionTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
 
-  def test_youtu_llm_construct_forward_shape_and_registry_resolution
+  def test_youtu_llm_construct_forward_shape_and_registration_resolution
     args = MlxLm::Models::YoutuLLM::ModelArgs.from_dict({
       "model_type" => "youtu_llm",
       "vocab_size" => 128,

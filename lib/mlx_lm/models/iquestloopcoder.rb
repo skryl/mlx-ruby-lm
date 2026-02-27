@@ -137,7 +137,6 @@ module MlxLm
         end
 
         def call(inputs, cache: nil)
-          mx = MLX::Core
           b, l = inputs.shape[0], inputs.shape[1]
 
           h = embed_tokens.call(inputs)

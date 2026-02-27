@@ -1,9 +1,8 @@
 require_relative "../test_helper"
 
-# Phase 4: Sampling & Generation Engine
 # Tests sampling functions (top-p, top-k, min-p, temperature, repetition penalty)
 # and the generation pipeline (generate_step, stream_generate, generate).
-class Phase4SamplingTest < Minitest::Test
+class SamplingAndGenerationTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -139,7 +138,7 @@ class Phase4SamplingTest < Minitest::Test
   end
 end
 
-class Phase4GenerateTest < Minitest::Test
+class SamplingAndGenerationGenerateStepGreedyTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

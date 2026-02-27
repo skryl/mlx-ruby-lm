@@ -11,7 +11,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/phi"
 require_relative "../../lib/mlx_lm/models/exaone"
 
-class Phase16DenseLaneBRegistryTest < Minitest::Test
+class PhiExaoneModelsTest < Minitest::Test
   def test_models_registered
     assert MlxLm::Models::REGISTRY.key?("phi"), "phi should be registered"
     assert MlxLm::Models::REGISTRY.key?("exaone"), "exaone should be registered"
@@ -28,7 +28,7 @@ class Phase16DenseLaneBRegistryTest < Minitest::Test
   end
 end
 
-class Phase16DenseLaneBPhiTest < Minitest::Test
+class PhiExaoneModelsPhiModelInstantiatesTest < Minitest::Test
   def setup
     @mx = MLX::Core
     @args = MlxLm::Models::Phi::ModelArgs.from_dict({
@@ -59,7 +59,7 @@ class Phase16DenseLaneBPhiTest < Minitest::Test
   end
 end
 
-class Phase16DenseLaneBExaoneTest < Minitest::Test
+class PhiExaoneModelsExaoneModelInstantiatesTest < Minitest::Test
   def setup
     @mx = MLX::Core
     @args = MlxLm::Models::Exaone::ModelArgs.from_dict({

@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/phi3small"
 require_relative "../../lib/mlx_lm/models/dots1"
 
-class Phase24DenseLaneAGPhi3smallTest < Minitest::Test
+class Phi3SmallDots1ModelsPhi3smallTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -61,7 +61,7 @@ class Phase24DenseLaneAGPhi3smallTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAGDots1Test < Minitest::Test
+class Phi3SmallDots1ModelsDots1Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -137,7 +137,7 @@ class Phase24DenseLaneAGDots1Test < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAGRegistryTest < Minitest::Test
+class Phi3SmallDots1ModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("phi3small"), "phi3small should be registered"
     assert MlxLm::Models::REGISTRY.key?("dots1"), "dots1 should be registered"

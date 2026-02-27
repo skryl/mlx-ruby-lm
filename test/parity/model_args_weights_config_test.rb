@@ -1,6 +1,6 @@
 require_relative "../test_helper"
 
-class Phase1BaseModelArgsTest < Minitest::Test
+class ModelArgsWeightsConfigTest < Minitest::Test
   include ParityTestHelpers
 
   # Test 1.1: BaseModelArgs round-trips from a config dict identically
@@ -53,7 +53,7 @@ class Phase1BaseModelArgsTest < Minitest::Test
   end
 end
 
-class Phase1WeightLoadingTest < Minitest::Test
+class ModelArgsWeightsConfigLoadSafetensorsShapesAndDtypesTest < Minitest::Test
   include ParityTestHelpers
 
   # Test 1.2: load_safetensors returns tensors with identical shapes/dtypes
@@ -111,7 +111,7 @@ class Phase1WeightLoadingTest < Minitest::Test
   end
 end
 
-class Phase1TreeUnflattenTest < Minitest::Test
+class ModelArgsWeightsConfigTreeUnflattenBasicTest < Minitest::Test
   include ParityTestHelpers
 
   # Test 1.4: tree_unflatten produces identical nested key structure
@@ -148,7 +148,7 @@ class Phase1TreeUnflattenTest < Minitest::Test
   end
 end
 
-class Phase1ConfigTest < Minitest::Test
+class ModelArgsWeightsConfigLoadConfigBasicTest < Minitest::Test
   include ParityTestHelpers
 
   # Test 1.5: Config parsing extracts identical model hyperparameters

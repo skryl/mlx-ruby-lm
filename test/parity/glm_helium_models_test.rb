@@ -10,7 +10,7 @@ require_relative "../../lib/mlx_lm/models/activations"
 require_relative "../../lib/mlx_lm/models/glm"
 require_relative "../../lib/mlx_lm/models/helium"
 
-class Phase16DenseLaneCGlmTest < Minitest::Test
+class GlmHeliumModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -50,7 +50,7 @@ class Phase16DenseLaneCGlmTest < Minitest::Test
   end
 end
 
-class Phase16DenseLaneCHeliumTest < Minitest::Test
+class GlmHeliumModelsHeliumInstantiationForwardShapeAndMlpBiasTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end

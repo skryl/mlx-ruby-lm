@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase15IntegrationSmokeTest < Minitest::Test
+class SsmGatedDeltaBitlinearPipelineIntegrationSmokeTest < Minitest::Test
   def test_new_phase15_modules_load
     assert defined?(MlxLm::Models::SSM)
     assert defined?(MlxLm::Models::GatedDelta)

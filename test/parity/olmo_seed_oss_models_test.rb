@@ -1,6 +1,6 @@
 require_relative "../test_helper"
 
-class Phase16DenseLaneDTest < Minitest::Test
+class OlmoSeedOssModelsTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

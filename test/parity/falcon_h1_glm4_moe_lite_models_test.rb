@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/falcon_h1"
 require_relative "../../lib/mlx_lm/models/glm4_moe_lite"
 
-class Phase26DenseLaneAPFalconH1Test < Minitest::Test
+class FalconH1Glm4MoeLiteModelsH1Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -62,7 +62,7 @@ class Phase26DenseLaneAPFalconH1Test < Minitest::Test
   end
 end
 
-class Phase26DenseLaneAPGlm4MoeLiteTest < Minitest::Test
+class FalconH1Glm4MoeLiteModelsGlm4MoeLiteTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -138,7 +138,7 @@ class Phase26DenseLaneAPGlm4MoeLiteTest < Minitest::Test
   end
 end
 
-class Phase26DenseLaneAPRegistryTest < Minitest::Test
+class FalconH1Glm4MoeLiteModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("falcon_h1"), "falcon_h1 should be registered"
     assert MlxLm::Models::REGISTRY.key?("glm4_moe_lite"), "glm4_moe_lite should be registered"

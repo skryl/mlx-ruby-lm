@@ -1,5 +1,7 @@
 # mlx-ruby-lm
 
+[![Tests](https://github.com/skryl/mlx-ruby-lm/actions/workflows/ci.yml/badge.svg)](https://github.com/skryl/mlx-ruby-lm/actions/workflows/ci.yml) [![Gem Version](https://badge.fury.io/rb/mlx-ruby-lm.svg)](https://rubygems.org/gems/mlx-ruby-lm)
+
 Ruby LLM inference toolkit built on the `mlx` gem.
 
 ## Included tools

@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - README.md
+      - docs/**
   pull_request:
+    paths-ignore:
+      - README.md
+      - docs/**
 
 jobs:
   test:
@@ -55,4 +61,4 @@ jobs:
           echo "${GITHUB_WORKSPACE}/.venv-test/bin" >> "$GITHUB_PATH"
 
       - name: Run all tests
-        run: bundle exec rake test
+        run: bundle exec rake test:all

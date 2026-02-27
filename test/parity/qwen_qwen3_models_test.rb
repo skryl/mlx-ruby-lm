@@ -9,7 +9,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/qwen"
 require_relative "../../lib/mlx_lm/models/qwen3"
 
-class Phase16DenseLaneAQwenTest < Minitest::Test
+class QwenQwen3ModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -59,7 +59,7 @@ class Phase16DenseLaneAQwenTest < Minitest::Test
   end
 end
 
-class Phase16DenseLaneAQwen3Test < Minitest::Test
+class QwenQwen3ModelsQwen3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end

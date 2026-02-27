@@ -11,12 +11,12 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/glm4"
 require_relative "../../lib/mlx_lm/models/telechat3"
 
-class Phase17DenseLaneFGLM4Test < Minitest::Test
+class Glm4Telechat3ModelsM4Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
 
-  def test_glm4_construct_forward_shape_and_registry_resolution
+  def test_glm4_construct_forward_shape_and_registration_resolution
     args = MlxLm::Models::GLM4::ModelArgs.from_dict({
       "model_type" => "glm4",
       "hidden_size" => 64,
@@ -49,12 +49,12 @@ class Phase17DenseLaneFGLM4Test < Minitest::Test
   end
 end
 
-class Phase17DenseLaneFTelechat3Test < Minitest::Test
+class Glm4Telechat3ModelsTelechat3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
 
-  def test_telechat3_construct_forward_shape_and_registry_resolution
+  def test_telechat3_construct_forward_shape_and_registration_resolution
     args = MlxLm::Models::Telechat3::ModelArgs.from_dict({
       "model_type" => "telechat3",
       "hidden_size" => 64,

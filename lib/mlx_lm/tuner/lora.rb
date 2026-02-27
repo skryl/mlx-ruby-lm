@@ -65,6 +65,22 @@ module MlxLm
       end
     end
 
+    # Compatibility wrapper for SwitchLinear LoRA adaptation paths.
+    class LoRASwitchLinear < LoRALinear
+      def call(x, indices = nil, **kwargs)
+        mx = MLX::Core
+        y = if indices.nil?
+          linear.call(x)
+        else
+          linear.call(x, indices, **kwargs)
+        end
+
+        z = dropout.call(x)
+        z = mx.matmul(mx.matmul(z, lora_a), lora_b)
+        y + z * @scale
+      end
+    end
+
     # LoRA adapter for Embedding layers.
     class LoRAEmbedding < MLX::NN::Module
       def self.from_base(embedding, r: 8, dropout: 0.0, scale: 20.0)

@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/lille_130m"
 require_relative "../../lib/mlx_lm/models/mimo"
 
-class Phase21DenseLaneVLille130mTest < Minitest::Test
+class Lille130MMimoModelsLille130mTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -51,7 +51,7 @@ class Phase21DenseLaneVLille130mTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneVMimoTest < Minitest::Test
+class Lille130MMimoModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -97,7 +97,7 @@ class Phase21DenseLaneVMimoTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneVRegistryTest < Minitest::Test
+class Lille130MMimoModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("lille-130m"), "lille-130m should be registered"
     assert MlxLm::Models::REGISTRY.key?("mimo"), "mimo should be registered"

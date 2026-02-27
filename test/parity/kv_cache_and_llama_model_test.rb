@@ -1,6 +1,6 @@
 require_relative "../test_helper"
 
-class Phase3KVCacheTest < Minitest::Test
+class KvCacheAndLlamaModelTest < Minitest::Test
   include ParityTestHelpers
 
   def mx
@@ -87,7 +87,7 @@ class Phase3KVCacheTest < Minitest::Test
   end
 end
 
-class Phase3LlamaModelTest < Minitest::Test
+class KvCacheAndLlamaModelForwardPassShapesTest < Minitest::Test
   include ParityTestHelpers
 
   def mx

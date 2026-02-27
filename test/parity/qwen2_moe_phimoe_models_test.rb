@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/qwen2"
 require_relative "../../lib/mlx_lm/models/qwen2_moe"
 require_relative "../../lib/mlx_lm/models/phimoe"
 
-class Phase21DenseLaneWQwen2MoeTest < Minitest::Test
+class Qwen2MoePhimoeModelsQwen2MoeTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -83,7 +83,7 @@ class Phase21DenseLaneWQwen2MoeTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneWPhiMoeTest < Minitest::Test
+class Qwen2MoePhimoeModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -157,7 +157,7 @@ class Phase21DenseLaneWPhiMoeTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneWRegistryTest < Minitest::Test
+class Qwen2MoePhimoeModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("qwen2_moe"), "qwen2_moe should be registered"
     assert MlxLm::Models::REGISTRY.key?("phimoe"), "phimoe should be registered"

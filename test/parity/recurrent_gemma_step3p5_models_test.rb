@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/recurrent_gemma"
 require_relative "../../lib/mlx_lm/models/step3p5"
 
-class Phase24DenseLaneANRecurrentGemmaTest < Minitest::Test
+class RecurrentGemmaStep3P5ModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -73,7 +73,7 @@ class Phase24DenseLaneANRecurrentGemmaTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneANStep3p5Test < Minitest::Test
+class RecurrentGemmaStep3P5ModelsStep3p5Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -174,7 +174,7 @@ class Phase24DenseLaneANStep3p5Test < Minitest::Test
   end
 end
 
-class Phase24DenseLaneANRegistryTest < Minitest::Test
+class RecurrentGemmaStep3P5ModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("recurrent_gemma"), "recurrent_gemma should be registered"
     assert MlxLm::Models::REGISTRY.key?("step3p5"), "step3p5 should be registered"

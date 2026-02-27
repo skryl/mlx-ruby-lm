@@ -1,6 +1,6 @@
 require_relative "../test_helper"
 
-class Phase2TokenizerTest < Minitest::Test
+class TokenizerStreamingDetokenizerTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -75,7 +75,7 @@ class Phase2TokenizerTest < Minitest::Test
   end
 end
 
-class Phase2StreamingDetokenizerTest < Minitest::Test
+class TokenizerStreamingDetokenizerStreamingProducesSameFinalStringTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

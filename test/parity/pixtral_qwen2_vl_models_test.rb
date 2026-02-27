@@ -11,7 +11,7 @@ require_relative "../../lib/mlx_lm/models/qwen2"
 require_relative "../../lib/mlx_lm/models/pixtral"
 require_relative "../../lib/mlx_lm/models/qwen2_vl"
 
-class Phase19DenseLaneMPixtralTest < Minitest::Test
+class PixtralQwen2VlModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -54,7 +54,7 @@ class Phase19DenseLaneMPixtralTest < Minitest::Test
   end
 end
 
-class Phase19DenseLaneMQwen2VLTest < Minitest::Test
+class PixtralQwen2VlModelsQwen2VLTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -102,7 +102,7 @@ class Phase19DenseLaneMQwen2VLTest < Minitest::Test
   end
 end
 
-class Phase19DenseLaneMRegistryTest < Minitest::Test
+class PixtralQwen2VlModelsModelsRegisteredAndResolvedTest < Minitest::Test
   def test_models_registered_and_resolved
     assert MlxLm::Models::REGISTRY.key?("pixtral"), "pixtral should be registered"
     assert MlxLm::Models::REGISTRY.key?("qwen2_vl"), "qwen2_vl should be registered"

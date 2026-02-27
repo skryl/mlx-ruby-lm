@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/ssm"
 require_relative "../../lib/mlx_lm/models/mamba"
 require_relative "../../lib/mlx_lm/models/mamba2"
 
-class Phase23DenseLaneADMambaTest < Minitest::Test
+class MambaMamba2ModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -56,7 +56,7 @@ class Phase23DenseLaneADMambaTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneADMamba2Test < Minitest::Test
+class MambaMamba2ModelsMamba2Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -105,7 +105,7 @@ class Phase23DenseLaneADMamba2Test < Minitest::Test
   end
 end
 
-class Phase23DenseLaneADRegistryTest < Minitest::Test
+class MambaMamba2ModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("mamba"), "mamba should be registered"
     assert MlxLm::Models::REGISTRY.key?("mamba2"), "mamba2 should be registered"

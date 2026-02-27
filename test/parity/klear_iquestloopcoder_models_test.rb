@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/klear"
 require_relative "../../lib/mlx_lm/models/iquestloopcoder"
 
-class Phase23DenseLaneAFKlearTest < Minitest::Test
+class KlearIquestloopcoderModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -80,7 +80,7 @@ class Phase23DenseLaneAFKlearTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneAFIquestloopcoderTest < Minitest::Test
+class KlearIquestloopcoderModelsIquestloopcoderConstructForwardShapeAndMakeCacheHalvesTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -122,7 +122,7 @@ class Phase23DenseLaneAFIquestloopcoderTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneAFRegistryTest < Minitest::Test
+class KlearIquestloopcoderModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("Klear"), "Klear should be registered"
     assert MlxLm::Models::REGISTRY.key?("iquestloopcoder"), "iquestloopcoder should be registered"

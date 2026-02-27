@@ -10,7 +10,7 @@ require_relative "../../lib/mlx_lm/models/cache"
 require_relative "../../lib/mlx_lm/models/recurrent_gemma"
 require_relative "../../lib/mlx_lm/models/rwkv7"
 
-class Phase45DenseLaneAURwkv7Test < Minitest::Test
+class Rwkv7ModelRwkv7Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -58,7 +58,7 @@ class Phase45DenseLaneAURwkv7Test < Minitest::Test
   end
 end
 
-class Phase45DenseLaneAURegistryTest < Minitest::Test
+class Rwkv7ModelTest < Minitest::Test
   def test_rwkv7_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("rwkv7"), "rwkv7 should be registered"
 

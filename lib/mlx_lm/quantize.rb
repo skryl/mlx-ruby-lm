@@ -37,7 +37,6 @@ module MlxLm
     # @param model [nn::Module] The quantized model to dequantize
     # @return [nn::Module] The dequantized model
     def dequantize_model(model)
-      mx = MLX::Core
       de_quantize_layers(model)
       model
     end

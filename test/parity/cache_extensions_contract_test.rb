@@ -1,6 +1,6 @@
 require_relative "../test_helper"
 
-class Phase14CacheExtensionsTest < Minitest::Test
+class CacheExtensionsContractTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

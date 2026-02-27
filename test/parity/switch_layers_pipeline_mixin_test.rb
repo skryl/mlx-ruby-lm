@@ -1,7 +1,7 @@
 require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/pipeline"
 
-class Phase15SwitchPipelineTest < Minitest::Test
+class SwitchLayersPipelineMixinTest < Minitest::Test
   include ParityTestHelpers
 
   class FakeGroup

@@ -9,7 +9,7 @@ require_relative "../../lib/mlx_lm/models"
 require_relative "../../lib/mlx_lm/models/gpt_bigcode"
 require_relative "../../lib/mlx_lm/models/nemotron"
 
-class Phase18DenseLaneJGPTBigCodeTest < Minitest::Test
+class GptBigcodeNemotronModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -40,7 +40,7 @@ class Phase18DenseLaneJGPTBigCodeTest < Minitest::Test
   end
 end
 
-class Phase18DenseLaneJNemotronTest < Minitest::Test
+class GptBigcodeNemotronModelsNemotronConstructForwardShapeAndLinearRopeScaleTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -74,7 +74,7 @@ class Phase18DenseLaneJNemotronTest < Minitest::Test
   end
 end
 
-class Phase18DenseLaneJRegistryTest < Minitest::Test
+class GptBigcodeNemotronModelsModelsRegisteredTest < Minitest::Test
   def test_models_registered
     assert MlxLm::Models::REGISTRY.key?("gpt_bigcode"), "gpt_bigcode should be registered"
     assert MlxLm::Models::REGISTRY.key?("nemotron"), "nemotron should be registered"

@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase14IntegrationSmokeTest < Minitest::Test
+class RopeMlaCacheIntegrationSmokeTest < Minitest::Test
   def test_phase14_components_are_available_from_top_level_require
     assert defined?(MlxLm::Models::SuScaledRoPE)
     assert defined?(MlxLm::Models::Llama3RoPE)

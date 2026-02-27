@@ -10,7 +10,7 @@ require_relative "../../lib/mlx_lm/models/activations"
 require_relative "../../lib/mlx_lm/models/llama4_text"
 require_relative "../../lib/mlx_lm/models/plamo"
 
-class Phase23DenseLaneACLlama4TextTest < Minitest::Test
+class Llama4TextPlamoModelsLlama4TextTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -53,7 +53,7 @@ class Phase23DenseLaneACLlama4TextTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneACPlamoTest < Minitest::Test
+class Llama4TextPlamoModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -84,7 +84,7 @@ class Phase23DenseLaneACPlamoTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneACRegistryTest < Minitest::Test
+class Llama4TextPlamoModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("llama4_text"), "llama4_text should be registered"
     assert MlxLm::Models::REGISTRY.key?("plamo"), "plamo should be registered"

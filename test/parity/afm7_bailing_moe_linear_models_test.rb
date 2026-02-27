@@ -4,7 +4,7 @@ require_relative "../../lib/mlx_lm/models/bailing_moe"
 require_relative "../../lib/mlx_lm/models/afm7"
 require_relative "../../lib/mlx_lm/models/bailing_moe_linear"
 
-class Phase27DenseLaneAOAfm7Test < Minitest::Test
+class Afm7BailingMoeLinearModelsAfm7Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -54,7 +54,7 @@ class Phase27DenseLaneAOAfm7Test < Minitest::Test
   end
 end
 
-class Phase27DenseLaneAOBailingMoeLinearTest < Minitest::Test
+class Afm7BailingMoeLinearModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -136,7 +136,7 @@ class Phase27DenseLaneAOBailingMoeLinearTest < Minitest::Test
   end
 end
 
-class Phase27DenseLaneAORegistryTest < Minitest::Test
+class Afm7BailingMoeLinearModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("afm7"), "afm7 should be registered"
     assert MlxLm::Models::REGISTRY.key?("bailing_moe_linear"), "bailing_moe_linear should be registered"

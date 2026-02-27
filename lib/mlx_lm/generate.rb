@@ -13,6 +13,54 @@ module MlxLm
     keyword_init: true
   )
 
+  # Batch-level generation statistics.
+  BatchStats = Struct.new(
+    :prompt_tokens,
+    :generation_tokens,
+    :prompt_tps,
+    :generation_tps,
+    :peak_memory,
+    keyword_init: true
+  )
+
+  # Response item for batched generation streams.
+  BatchResponse = Struct.new(
+    :index,
+    :response,
+    keyword_init: true
+  )
+
+  # Python API compatibility alias for generation response objects.
+  Response = GenerationResponse
+
+  # Small batch container used by batch generation APIs.
+  class Batch
+    attr_reader :items
+
+    def initialize(items)
+      @items = Array(items)
+    end
+
+    def size
+      @items.size
+    end
+  end
+
+  # Enumerable wrapper for batched response streams.
+  class BatchGenerator
+    include Enumerable
+
+    def initialize(enum)
+      @enum = enum
+    end
+
+    def each(&block)
+      return @enum.each unless block
+
+      @enum.each(&block)
+    end
+  end
+
   module Generate
     module_function
 
@@ -127,15 +175,12 @@ module MlxLm
 
       Enumerator.new do |yielder|
         n = 0
-        last_token = nil
         token_generator.each do |token, logprobs|
           if n == 0
             prompt_time = Process.clock_gettime(Process::CLOCK_MONOTONIC) - tic
             prompt_tps = prompt.size.to_f / [prompt_time, 1e-9].max
             tic = Process.clock_gettime(Process::CLOCK_MONOTONIC)
           end
-
-          last_token = token
 
           if tokenizer.eos_token_ids.include?(token)
             detokenizer.finalize
@@ -199,6 +244,28 @@ module MlxLm
         puts "Generation: #{response.generation_tokens} tokens, #{'%.3f' % response.generation_tps} tokens-per-sec"
       end
       text
+    end
+
+    # Simple batched generation helper.
+    # Returns an Array<String> with one completion per prompt.
+    def batch_generate(model, tokenizer, prompts, **kwargs)
+      batch = Batch.new(prompts)
+      batch.items.map do |prompt|
+        generate(model, tokenizer, prompt, **kwargs)
+      end
+    end
+
+    # Batched streaming helper that yields BatchResponse items.
+    def stream_batch_generate(model, tokenizer, prompts, **kwargs)
+      batch = Batch.new(prompts)
+      enum = Enumerator.new do |yielder|
+        batch.items.each_with_index do |prompt, idx|
+          stream_generate(model, tokenizer, prompt, **kwargs).each do |resp|
+            yielder << BatchResponse.new(index: idx, response: resp)
+          end
+        end
+      end
+      BatchGenerator.new(enum)
     end
   end
 end

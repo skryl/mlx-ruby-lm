@@ -1,8 +1,7 @@
 require_relative "../test_helper"
 
-# Phase 7: Quantization Engine
 # Tests quantization, dequantization, and quantization-aware loading.
-class Phase7QuantizeTest < Minitest::Test
+class QuantizationPipelineTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

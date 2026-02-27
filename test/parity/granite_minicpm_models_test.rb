@@ -11,8 +11,8 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/granite"
 require_relative "../../lib/mlx_lm/models/minicpm"
 
-class Phase17DenseLaneGRegistryTest < Minitest::Test
-  def test_registry_entries_for_lane_g_models
+class GraniteMinicpmModelsTest < Minitest::Test
+  def test_registration_entries_for_lane_g_models
     assert MlxLm::Models::REGISTRY.key?("granite"), "granite should be registered"
     assert MlxLm::Models::REGISTRY.key?("minicpm"), "minicpm should be registered"
 
@@ -26,7 +26,7 @@ class Phase17DenseLaneGRegistryTest < Minitest::Test
   end
 end
 
-class Phase17DenseLaneGGraniteTest < Minitest::Test
+class GraniteMinicpmModelsGraniteConstructForwardShapeAndScalingFieldsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -66,7 +66,7 @@ class Phase17DenseLaneGGraniteTest < Minitest::Test
   end
 end
 
-class Phase17DenseLaneGMiniCPMTest < Minitest::Test
+class GraniteMinicpmModelsMinicpmConstructForwardShapeAndDepthScalingTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
