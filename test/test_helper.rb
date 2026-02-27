@@ -30,6 +30,8 @@ module ParityTestHelpers
     end
 
     JSON.parse(stdout)
+  rescue Errno::ENOENT
+    raise "Python eval failed: python3 is not installed"
   end
 
   # Assert two flat arrays are element-wise close
