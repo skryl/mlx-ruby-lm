@@ -703,6 +703,7 @@ module OnnxExportTestHelper
 
     begin
       mx = MLX::Core
+      mx.set_default_device(mx.cpu)
       model_class, args_class = MlxLm::Models.get_classes(config)
       args = args_class.from_dict(config)
       model = model_class.new(args)
@@ -772,7 +773,12 @@ module OnnxExportTestHelper
     err = +""
     status = nil
 
-    Open3.popen3("ruby", "-e", SUBPROCESS_SCRIPT, config_json, chdir: project_root) do |stdin, stdout, stderr, wait_thr|
+    env = {
+      "MLX_DEFAULT_DEVICE" => "cpu",
+      "DEVICE" => "cpu",
+    }
+
+    Open3.popen3(env, "ruby", "-e", SUBPROCESS_SCRIPT, config_json, chdir: project_root) do |stdin, stdout, stderr, wait_thr|
       stdin.close
       out_reader = Thread.new { stdout.read.to_s }
       err_reader = Thread.new { stderr.read.to_s }

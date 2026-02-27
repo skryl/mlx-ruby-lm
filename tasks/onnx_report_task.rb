@@ -14,7 +14,7 @@ class OnnxReportTask
   INVOCATIONS_CSV_PATH = REPORT_DIR.join("onnx_compat_missing_ops_invocations.csv")
 
   COMMAND = [
-    "bundle", "exec", "rake", "test",
+    "bundle", "exec", "rake", "test[cpu]",
     "TEST=test/onnx/*_test.rb",
     "TESTOPTS=--name=/test_onnx_compat_report/"
   ].freeze
@@ -118,6 +118,8 @@ class OnnxReportTask
 
     def run_compat_suite
       env = {
+        "MLX_DEFAULT_DEVICE" => "cpu",
+        "DEVICE" => "cpu",
         "ONNX_COMPAT_REPORT_JSON" => "1",
         "ONNX_LOG_LINES" => "1"
       }
