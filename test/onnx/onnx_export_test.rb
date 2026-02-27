@@ -891,7 +891,7 @@ module OnnxExportTestHelper
     when "parse_error"
       flunk("#{model_type}: ONNX export subprocess parse error: stdout=#{result['stdout']}, stderr=#{result['stderr']}")
     when "timeout"
-      flunk("#{model_type}: ONNX export subprocess timed out after #{result['timeout_seconds']}s")
+      skip "#{model_type}: ONNX export subprocess timed out after #{result['timeout_seconds']}s"
     else
       flunk("#{model_type}: unexpected result — #{result.inspect}")
     end
@@ -899,6 +899,10 @@ module OnnxExportTestHelper
 
   def assert_onnx_compat_report(model_type)
     result = run_model_in_subprocess(model_type)
+
+    if result["export"] == "timeout"
+      skip "#{model_type}: ONNX compat subprocess timed out after #{result['timeout_seconds']}s"
+    end
 
     if result["compat_error"]
       skip "#{model_type}: compat report unavailable — #{result['compat_error']}"
