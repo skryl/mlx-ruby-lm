@@ -10,7 +10,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     minitest (5.27.0)
-    mlx (0.30.7.5)
+    mlx (0.30.7.6)
     ostruct (0.6.3)
     rake (13.3.1)
     safetensors (0.2.2-aarch64-linux)
@@ -36,14 +36,14 @@ PLATFORMS
 
 DEPENDENCIES
   minitest (~> 5.20)
-  mlx (>= 0.30.7.5, < 1.0)
+  mlx (>= 0.30.7.6, < 1.0)
   mlx-ruby-lm!
   ostruct
   rake (~> 13.0)
 
 CHECKSUMS
   minitest (5.27.0) sha256=2d3b17f8a36fe7801c1adcffdbc38233b938eb0b4966e97a6739055a45fa77d5
-  mlx (0.30.7.5) sha256=4bc40c7fea959689a33ab3af7b734c2beca8c44484ecf58b8f71febe6e5d0f75
+  mlx (0.30.7.6) sha256=1bd1f6b944e990147fdbe2654ba2830f14dc9ff7dcb9c4c5a314c916b4b92d66
   mlx-ruby-lm (0.30.7.1)
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
