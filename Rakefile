@@ -5,10 +5,67 @@ require_relative "tasks/parity_inventory_task"
 VENV_DIR = File.expand_path(".venv-test", __dir__)
 VENV_PYTHON = File.join(VENV_DIR, "bin", "python")
 REQUIREMENTS_FILE = File.expand_path("requirements.txt", __dir__)
+TEST_DEVICE_CHOICES = %w[cpu gpu].freeze
+DEFAULT_TEST_DEVICES = %w[cpu gpu].freeze
 
-Rake::TestTask.new(:test) do |t|
+def parse_test_devices(args)
+  raw_values = []
+  raw_values << args[:devices] if args[:devices]
+  raw_values.concat(args.extras) if args.respond_to?(:extras)
+
+  values = if raw_values.empty?
+    DEFAULT_TEST_DEVICES.dup
+  else
+    raw_values
+      .flat_map { |value| value.to_s.split(",") }
+      .map(&:strip)
+      .reject(&:empty?)
+      .map(&:downcase)
+  end
+
+  values = DEFAULT_TEST_DEVICES.dup if values.empty?
+  invalid = values - TEST_DEVICE_CHOICES
+  unless invalid.empty?
+    raise ArgumentError, "invalid test device(s): #{invalid.join(', ')} (supported: #{TEST_DEVICE_CHOICES.join(', ')})"
+  end
+
+  values.uniq
+end
+
+Rake::TestTask.new("test:run") do |t|
   t.libs << "test" << "lib"
   t.test_files = FileList["test/**/*_test.rb"]
+end
+
+desc "Run tests on devices (default: cpu then gpu). Examples: rake test, rake \"test[cpu]\", rake \"test[cpu,gpu]\""
+task :test, [:devices] do |_task, args|
+  devices = parse_test_devices(args)
+
+  devices.each do |device|
+    puts "\n==> Running test suite on #{device.upcase}"
+
+    previous_mlx_default_device = ENV["MLX_DEFAULT_DEVICE"]
+    previous_device = ENV["DEVICE"]
+
+    begin
+      ENV["MLX_DEFAULT_DEVICE"] = device
+      ENV["DEVICE"] = device
+      Rake::Task["test:run"].reenable
+      Rake::Task["test:run"].invoke
+    ensure
+      if previous_mlx_default_device.nil?
+        ENV.delete("MLX_DEFAULT_DEVICE")
+      else
+        ENV["MLX_DEFAULT_DEVICE"] = previous_mlx_default_device
+      end
+
+      if previous_device.nil?
+        ENV.delete("DEVICE")
+      else
+        ENV["DEVICE"] = previous_device
+      end
+    end
+  end
 end
 
 namespace :test do
@@ -24,6 +81,23 @@ namespace :test do
   Rake::TestTask.new(:parity) do |t|
     t.libs << "test" << "lib"
     t.test_files = FileList["test/parity/**/*_test.rb"]
+  end
+
+  desc "Run full test suite including ONNX full export tests"
+  task :all do
+    previous_full_export = ENV["ONNX_FULL_EXPORT"]
+    ENV["ONNX_FULL_EXPORT"] = "1"
+
+    begin
+      Rake::Task[:test].reenable
+      Rake::Task[:test].invoke
+    ensure
+      if previous_full_export.nil?
+        ENV.delete("ONNX_FULL_EXPORT")
+      else
+        ENV["ONNX_FULL_EXPORT"] = previous_full_export
+      end
+    end
   end
 end
 
