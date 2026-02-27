@@ -27,7 +27,11 @@ Gem::Specification.new do |s|
   s.executables = s.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "mlx", "~> 0.1"
+  s.add_dependency "mlx", ">= 0.30.7.5", "< 1.0"
   s.add_dependency "safetensors", "~> 0.2"
   s.add_dependency "tokenizers", "~> 0.6"
+
+  s.add_development_dependency "minitest", "~> 5.20"
+  s.add_development_dependency "ostruct"
+  s.add_development_dependency "rake", "~> 13.0"
 end

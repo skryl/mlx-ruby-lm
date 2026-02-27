@@ -1,15 +1,11 @@
 PATH
   remote: .
   specs:
+    mlx (0.30.7.4)
     mlx-ruby-lm (0.30.7.1)
-      mlx (~> 0.1)
+      mlx (>= 0.30.7.5, < 1.0)
       safetensors (~> 0.2)
       tokenizers (~> 0.6)
-
-PATH
-  remote: mlx-ruby
-  specs:
-    mlx (0.30.7.4)
 
 GEM
   remote: https://rubygems.org/
@@ -29,7 +25,6 @@ PLATFORMS
 
 DEPENDENCIES
   minitest (~> 5.20)
-  mlx!
   mlx-ruby-lm!
   ostruct
   rake (~> 13.0)
