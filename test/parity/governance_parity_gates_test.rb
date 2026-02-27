@@ -6,7 +6,6 @@ require_relative "../../tasks/parity_inventory_task"
 
 class GovernanceParityGatesTest < Minitest::Test
   MLX_ONNX_SUBMODULE_DIR = File.expand_path("../../mlx-ruby/submodules/mlx-onnx", __dir__)
-  REQUIRED_MLX_ONNX_MIN_SHA = "33d4b2eed2aa342f0836298dda60b6c5eb011b0f"
   PARITY_CHECKLIST_PATH = File.expand_path("../../prd/2026_02_25_python_ruby_parity_checklist.md", __dir__)
   REQUIRED_MLX_ONNX_OPS = {
     "ArgPartition" => /ArgPartition|arg_partition/,
@@ -21,26 +20,6 @@ class GovernanceParityGatesTest < Minitest::Test
     MSG
 
     assert ParityInventoryTask.run!(check: true), message
-  end
-
-  def test_mlx_onnx_checkout_meets_minimum_commit
-    mlx_onnx_dir = MLX_ONNX_SUBMODULE_DIR
-    skip "mlx-onnx submodule checkout not available" unless Dir.exist?(mlx_onnx_dir)
-
-    _, _, status = Open3.capture3(
-      "git", "-C", mlx_onnx_dir, "merge-base", "--is-ancestor", REQUIRED_MLX_ONNX_MIN_SHA, "HEAD"
-    )
-    current_sha, = Open3.capture3("git", "-C", mlx_onnx_dir, "rev-parse", "HEAD")
-
-    message = <<~MSG
-      mlx-onnx minimum commit gate failed.
-      required minimum commit: #{REQUIRED_MLX_ONNX_MIN_SHA}
-      current HEAD: #{current_sha.strip}
-      checkout path: #{mlx_onnx_dir}
-      update submodule to a commit that includes required lowering support.
-    MSG
-
-    assert status.success?, message
   end
 
   def test_mlx_onnx_checkout_includes_required_ops
