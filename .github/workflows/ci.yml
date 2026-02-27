@@ -30,7 +30,11 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libopenblas-dev liblapack-dev gfortran
+          sudo apt-get install -y libopenblas-dev liblapack-dev liblapacke-dev gfortran
+          if [ ! -f /usr/include/lapacke.h ] && [ -f /usr/include/x86_64-linux-gnu/lapacke.h ]; then
+            sudo ln -s /usr/include/x86_64-linux-gnu/lapacke.h /usr/include/lapacke.h
+          fi
+          echo "CMAKE_INCLUDE_PATH=/usr/include/x86_64-linux-gnu:/usr/include" >> "$GITHUB_ENV"
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
