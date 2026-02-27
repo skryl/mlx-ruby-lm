@@ -1,0 +1,64 @@
+PATH
+  remote: .
+  specs:
+    mlx-ruby-lm (0.30.7.1)
+      mlx (>= 0.30.7.5, < 1.0)
+      safetensors (~> 0.2)
+      tokenizers (~> 0.6)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.27.0)
+    mlx (0.30.7.6)
+    ostruct (0.6.3)
+    rake (13.3.1)
+    safetensors (0.2.2-aarch64-linux)
+    safetensors (0.2.2-aarch64-linux-musl)
+    safetensors (0.2.2-arm64-darwin)
+    safetensors (0.2.2-x86_64-darwin)
+    safetensors (0.2.2-x86_64-linux)
+    safetensors (0.2.2-x86_64-linux-musl)
+    tokenizers (0.6.3-aarch64-linux)
+    tokenizers (0.6.3-aarch64-linux-musl)
+    tokenizers (0.6.3-arm64-darwin)
+    tokenizers (0.6.3-x86_64-darwin)
+    tokenizers (0.6.3-x86_64-linux)
+    tokenizers (0.6.3-x86_64-linux-musl)
+
+PLATFORMS
+  aarch64-linux
+  aarch64-linux-musl
+  arm64-darwin
+  x86_64-darwin
+  x86_64-linux
+  x86_64-linux-musl
+
+DEPENDENCIES
+  minitest (~> 5.20)
+  mlx (>= 0.30.7.6, < 1.0)
+  mlx-ruby-lm!
+  ostruct
+  rake (~> 13.0)
+
+CHECKSUMS
+  minitest (5.27.0) sha256=2d3b17f8a36fe7801c1adcffdbc38233b938eb0b4966e97a6739055a45fa77d5
+  mlx (0.30.7.6) sha256=1bd1f6b944e990147fdbe2654ba2830f14dc9ff7dcb9c4c5a314c916b4b92d66
+  mlx-ruby-lm (0.30.7.1)
+  ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
+  rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
+  safetensors (0.2.2-aarch64-linux) sha256=5b50146d50a76fe0395b7aef4d13a1da8fcad44e9cf0f5aead935d5d17fb04dd
+  safetensors (0.2.2-aarch64-linux-musl) sha256=d6dea4e4f5ca11cff8ba4c017382838df5d33d78f79fabd9a5e5e482aa6afd57
+  safetensors (0.2.2-arm64-darwin) sha256=19d77df47154038974f76a4e1bac2d778ea04ca2c49abcd5b9f9c0f1a899d10b
+  safetensors (0.2.2-x86_64-darwin) sha256=a1dc2b415f6ef35c8887b15a6f72c673f3b008455c33aa399154c0eabf5adbcd
+  safetensors (0.2.2-x86_64-linux) sha256=f447d3d3110a7592b521a23f58b0251283659b27f3700ab627ac6ba517fa04ff
+  safetensors (0.2.2-x86_64-linux-musl) sha256=0d52871f2b672485cda73bc94807bb6bd74409a33414fdc341950ceb88f76049
+  tokenizers (0.6.3-aarch64-linux) sha256=9d54a23f2e2246cc942d183af4549e3972b937d9b01f7a387cb146bf698eee84
+  tokenizers (0.6.3-aarch64-linux-musl) sha256=c178d8556769256857d77fb396f8ab004b29d058f59c620a2cfc56b01b501e27
+  tokenizers (0.6.3-arm64-darwin) sha256=29a6a5582dce106d846a906ee9e4254c12db45a3855c3ff6881d4be8be03e6b6
+  tokenizers (0.6.3-x86_64-darwin) sha256=4b71386cc08ceff5f86b448c74b2b297c00a280a1d502399b6cda23ef94e01fd
+  tokenizers (0.6.3-x86_64-linux) sha256=77a45cbde59daac33bdda1a74d45c18080478992a00ee7d898e7b8d15d0b3149
+  tokenizers (0.6.3-x86_64-linux-musl) sha256=a4b08c53bf0c8f7674c3abd03e013f0bb7c0c2457174b116c2872a37c64f0297
+
+BUNDLED WITH
+  4.0.6
