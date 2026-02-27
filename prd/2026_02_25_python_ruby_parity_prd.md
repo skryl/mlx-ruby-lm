@@ -1,7 +1,7 @@
 # Python `mlx-lm` -> Ruby `mlx-ruby-lm` Parity PRD (Execution Revision)
 
-**Status:** Active (Architecture Parity Achieved; Class-Level Completion In Progress)
-**Date:** 2026-02-26
+**Status:** Completed (Architecture + Class-Level Parity Closure Achieved)
+**Date:** 2026-02-27
 **Supersedes:** prior draft from 2026-02-25
 **References:**
 - [Python-Ruby Parity Checklist](2026_02_25_python_ruby_parity_checklist.md)
@@ -35,7 +35,7 @@ Validate with: `bundle exec rake parity:inventory_check`
 - Ruby registered architecture keys: **106**
 - Current architecture key gap: **0**
 - Python classes discovered (`mlx-lm/mlx_lm/**/*.py`): **768**
-- Ruby class parity status: **527 Implemented / 221 Partial / 20 Missing**
+- Ruby class parity status: **768 Implemented / 0 Partial / 0 Missing**
 
 ## 3. Scope
 
@@ -266,8 +266,8 @@ Every report refresh should produce committed artifacts when used for parity rev
 - [x] ONNX report task active: `onnx:report`
 - [x] ONNX report includes Markdown + JSON + invocation CSV artifacts
 - [x] Full class-level checklist published (`768` classes tracked)
-- [ ] Class parity closure backlog active (`221 Partial / 20 Missing`)
-- [ ] Phase D-I implementation not yet started in code
+- [x] Class parity closure backlog active and closed (`0 Partial / 0 Missing`)
+- [x] Phase D-I implementation completed in code
 
 ## 9. Success Definition
 

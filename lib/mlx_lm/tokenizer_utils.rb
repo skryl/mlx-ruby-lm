@@ -155,4 +155,29 @@ module MlxLm
       @last_segment = ""
     end
   end
+
+  # Compatibility subclasses mirroring Python detokenizer class names.
+  class NaiveStreamingDetokenizer < StreamingDetokenizer
+  end
+
+  class SPMStreamingDetokenizer < StreamingDetokenizer
+  end
+
+  class BPEStreamingDetokenizer < StreamingDetokenizer
+  end
+
+  # Small helper used by Python paths that split on newlines.
+  class NewlineTokenizer
+    def initialize(separator: "\n")
+      @separator = separator
+    end
+
+    def encode(text)
+      text.to_s.split(@separator, -1)
+    end
+
+    def decode(chunks)
+      Array(chunks).join(@separator)
+    end
+  end
 end
