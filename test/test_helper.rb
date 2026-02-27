@@ -7,6 +7,7 @@ require "minitest/autorun"
 require "json"
 require "tempfile"
 require "fileutils"
+require "open3"
 
 module ParityTestHelpers
   FIXTURES_DIR = File.expand_path("fixtures", __dir__)
@@ -17,9 +18,18 @@ module ParityTestHelpers
 
   # Run a Python snippet, capture JSON output, return parsed result
   def python_eval(code)
-    result = `python3 -c '#{code.gsub("'", "'\\\\''")}'`
-    raise "Python eval failed: #{result}" unless $?.success?
-    JSON.parse(result)
+    stdout, stderr, status = Open3.capture3("python3", "-c", code)
+    unless status.success?
+      raise <<~MSG
+        Python eval failed (exit #{status.exitstatus})
+        STDERR:
+        #{stderr}
+        STDOUT:
+        #{stdout}
+      MSG
+    end
+
+    JSON.parse(stdout)
   end
 
   # Assert two flat arrays are element-wise close

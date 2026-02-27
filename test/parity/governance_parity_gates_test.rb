@@ -5,8 +5,11 @@ require "open3"
 require_relative "../../tasks/parity_inventory_task"
 
 class Phase13GovernanceGatesTest < Minitest::Test
-  MIN_MLX_ONNX_SHA = "33d4b2eed2aa342f0836298dda60b6c5eb011b0f"
-  MLX_ONNX_DIR = File.expand_path("../../mlx-ruby/submodules/mlx-onnx", __dir__)
+  MLX_ONNX_SUBMODULE_DIR = File.expand_path("../../mlx-ruby/submodules/mlx-onnx", __dir__)
+  REQUIRED_MLX_ONNX_OPS = {
+    "ArgPartition" => /ArgPartition|arg_partition/,
+    "GatherMM" => /GatherMM|gather_mm/,
+  }.freeze
 
   def test_parity_inventory_snapshot_is_current
     message = <<~MSG
@@ -17,25 +20,41 @@ class Phase13GovernanceGatesTest < Minitest::Test
     assert ParityInventoryTask.run!(check: true), message
   end
 
-  def test_mlx_onnx_submodule_meets_minimum_onnx_commit
-    _, _, repo_status = Open3.capture3("git", "-C", MLX_ONNX_DIR, "rev-parse", "--is-inside-work-tree")
-    skip "mlx-onnx submodule checkout not available" unless repo_status.success?
+  def test_mlx_onnx_checkout_includes_required_ops
+    mlx_onnx_dir = MLX_ONNX_SUBMODULE_DIR
+    skip "mlx-onnx submodule checkout not available" unless Dir.exist?(mlx_onnx_dir)
 
-    current_sha, _, current_status = Open3.capture3("git", "-C", MLX_ONNX_DIR, "rev-parse", "HEAD")
-    assert current_status.success?, "failed to read mlx-onnx HEAD"
+    missing_ops = REQUIRED_MLX_ONNX_OPS.keys.reject do |op_name|
+      mlx_onnx_source_includes?(mlx_onnx_dir, REQUIRED_MLX_ONNX_OPS[op_name])
+    end
 
-    _, err, status = Open3.capture3(
-      "git", "-C", MLX_ONNX_DIR, "merge-base", "--is-ancestor", MIN_MLX_ONNX_SHA, "HEAD"
-    )
+    current_sha, = Open3.capture3("git", "-C", mlx_onnx_dir, "rev-parse", "HEAD")
 
     message = <<~MSG
-      mlx-onnx commit gate failed.
-      required minimum: #{MIN_MLX_ONNX_SHA}
+      mlx-onnx capability gate failed.
+      required ops: #{REQUIRED_MLX_ONNX_OPS.keys.join(", ")}
+      missing ops: #{missing_ops.join(", ")}
+      checkout path: #{mlx_onnx_dir}
       current HEAD: #{current_sha.strip}
-      ensure mlx-ruby/submodules/mlx-onnx is pinned to a commit that includes ArgPartition/GatherMM support.
-      git stderr: #{err}
+      ensure mlx-ruby mlx-onnx checkout includes ArgPartition/GatherMM support.
     MSG
 
-    assert status.success?, message
+    assert missing_ops.empty?, message
+  end
+
+  private
+
+  SOURCE_GLOB = "**/*.{cc,cpp,c,h,hpp,hh,mm,m,py,rb}".freeze
+
+  def mlx_onnx_source_includes?(root_dir, pattern)
+    Dir.glob(File.join(root_dir, SOURCE_GLOB)).any? do |path|
+      next false unless File.file?(path)
+
+      begin
+        File.read(path).match?(pattern)
+      rescue Encoding::InvalidByteSequenceError, Encoding::UndefinedConversionError
+        false
+      end
+    end
   end
 end

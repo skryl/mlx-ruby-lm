@@ -3,27 +3,11 @@ $LOAD_PATH.unshift File.expand_path("../../mlx-ruby/lib", __dir__)
 require "mlx"
 require "minitest/autorun"
 require "json"
+require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/rope_utils"
 
-module Phase14ParityHelpers
-  def python_eval(code)
-    result = `python3 -c '#{code.gsub("'", "'\\\\''")}'`
-    raise "Python eval failed: #{result}" unless $?.success?
-    JSON.parse(result)
-  end
-
-  def assert_arrays_close(expected, actual, atol: 1e-5, msg: nil)
-    expected = expected.flatten if expected.is_a?(Array) && expected.first.is_a?(Array)
-    actual = actual.flatten if actual.is_a?(Array) && actual.first.is_a?(Array)
-    assert_equal expected.length, actual.length, "#{msg} - length mismatch"
-    expected.zip(actual).each_with_index do |(e, a), i|
-      assert_in_delta e, a, atol, "#{msg} - element #{i}: expected #{e}, got #{a}"
-    end
-  end
-end
-
 class Phase14SuScaledRoPETest < Minitest::Test
-  include Phase14ParityHelpers
+  include ParityTestHelpers
 
   def setup
     @mx = MLX::Core
@@ -78,7 +62,7 @@ class Phase14SuScaledRoPETest < Minitest::Test
 end
 
 class Phase14Llama3RoPETest < Minitest::Test
-  include Phase14ParityHelpers
+  include ParityTestHelpers
 
   def setup
     @mx = MLX::Core
@@ -143,7 +127,7 @@ class Phase14Llama3RoPETest < Minitest::Test
 end
 
 class Phase14YarnRoPETest < Minitest::Test
-  include Phase14ParityHelpers
+  include ParityTestHelpers
 
   def setup
     @mx = MLX::Core
