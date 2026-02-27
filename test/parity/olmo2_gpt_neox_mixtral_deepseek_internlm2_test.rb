@@ -1,9 +1,8 @@
 require_relative "../test_helper"
 
-# Phase 11: Model Architectures (Batch 3)
 # Tests OLMo2, GPTNeoX, Mixtral, DeepSeek, and InternLM2 model architectures.
 
-class Phase11OLMo2Test < Minitest::Test
+class Olmo2GptNeoxMixtralDeepseekInternlm2Mo2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -57,7 +56,7 @@ class Phase11OLMo2Test < Minitest::Test
   end
 end
 
-class Phase11GPTNeoXTest < Minitest::Test
+class Olmo2GptNeoxMixtralDeepseekInternlm2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -114,7 +113,7 @@ class Phase11GPTNeoXTest < Minitest::Test
   end
 end
 
-class Phase11MixtralTest < Minitest::Test
+class Olmo2GptNeoxMixtralDeepseekInternlm2MixtralForwardTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -170,7 +169,7 @@ class Phase11MixtralTest < Minitest::Test
   end
 end
 
-class Phase11DeepSeekTest < Minitest::Test
+class Olmo2GptNeoxMixtralDeepseekInternlm2DeepseekForwardDenseTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -230,7 +229,7 @@ class Phase11DeepSeekTest < Minitest::Test
   end
 end
 
-class Phase11InternLM2Test < Minitest::Test
+class Olmo2GptNeoxMixtralDeepseekInternlm2M2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup

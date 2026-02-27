@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase26IntegrationRegistryTest < Minitest::Test
+class RegistryKeysAfm7BailingMoeLinearFalconH1Glm4MoeLiteTest < Minitest::Test
   MODEL_TYPES = %w[
     afm7
     bailing_moe_linear

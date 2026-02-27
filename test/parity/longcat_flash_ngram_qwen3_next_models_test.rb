@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/longcat_flash_ngram"
 require_relative "../../lib/mlx_lm/models/qwen3_next"
 
-class Phase46DenseLaneASLongcatFlashNgramTest < Minitest::Test
+class LongcatFlashNgramQwen3NextModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -80,7 +80,7 @@ class Phase46DenseLaneASLongcatFlashNgramTest < Minitest::Test
   end
 end
 
-class Phase46DenseLaneASQwen3NextTest < Minitest::Test
+class LongcatFlashNgramQwen3NextModelsQwen3NextTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -163,7 +163,7 @@ class Phase46DenseLaneASQwen3NextTest < Minitest::Test
   end
 end
 
-class Phase46DenseLaneASRegistryTest < Minitest::Test
+class LongcatFlashNgramQwen3NextModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("longcat_flash_ngram"), "longcat_flash_ngram should be registered"
     assert MlxLm::Models::REGISTRY.key?("qwen3_next"), "qwen3_next should be registered"

@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/phixtral"
 require_relative "../../lib/mlx_lm/models/minicpm3"
 
-class Phase21DenseLaneXPhixtralTest < Minitest::Test
+class PhixtralMinicpm3ModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -72,7 +72,7 @@ class Phase21DenseLaneXPhixtralTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneXMiniCPM3Test < Minitest::Test
+class PhixtralMinicpm3ModelsM3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -135,7 +135,7 @@ class Phase21DenseLaneXMiniCPM3Test < Minitest::Test
   end
 end
 
-class Phase21DenseLaneXRegistryTest < Minitest::Test
+class PhixtralMinicpm3ModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("phixtral"), "phixtral should be registered"
     assert MlxLm::Models::REGISTRY.key?("minicpm3"), "minicpm3 should be registered"

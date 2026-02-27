@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/exaone4"
 require_relative "../../lib/mlx_lm/models/nanochat"
 
-class Phase17DenseLaneHExaone4Test < Minitest::Test
+class Exaone4NanochatModelsExaone4Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -43,7 +43,7 @@ class Phase17DenseLaneHExaone4Test < Minitest::Test
   end
 end
 
-class Phase17DenseLaneHNanochatTest < Minitest::Test
+class Exaone4NanochatModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -74,7 +74,7 @@ class Phase17DenseLaneHNanochatTest < Minitest::Test
   end
 end
 
-class Phase17DenseLaneHRegistryTest < Minitest::Test
+class Exaone4NanochatModelsModelsRegisteredTest < Minitest::Test
   def test_models_registered
     assert MlxLm::Models::REGISTRY.key?("exaone4"), "exaone4 should be registered"
     assert MlxLm::Models::REGISTRY.key?("nanochat"), "nanochat should be registered"

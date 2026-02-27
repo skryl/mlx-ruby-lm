@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/falcon_h1"
 require_relative "../../lib/mlx_lm/models/granitemoehybrid"
 require_relative "../../lib/mlx_lm/models/jamba"
 
-class Phase27HybridLaneAQGraniteMoeHybridTest < Minitest::Test
+class GranitemoehybridJambaModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -89,7 +89,7 @@ class Phase27HybridLaneAQGraniteMoeHybridTest < Minitest::Test
   end
 end
 
-class Phase27HybridLaneAQJambaTest < Minitest::Test
+class GranitemoehybridJambaModelsJambaConstructForwardShapeSanitizeMappingAndCacheTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -161,7 +161,7 @@ class Phase27HybridLaneAQJambaTest < Minitest::Test
   end
 end
 
-class Phase27HybridLaneAQRegistryTest < Minitest::Test
+class GranitemoehybridJambaModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("granitemoehybrid"), "granitemoehybrid should be registered"
     assert MlxLm::Models::REGISTRY.key?("jamba"), "jamba should be registered"

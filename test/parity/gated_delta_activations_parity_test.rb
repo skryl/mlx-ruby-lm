@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/activations"
 require_relative "../../lib/mlx_lm/models/gated_delta"
 
-class Phase15ActivationsParityTest < Minitest::Test
+class GatedDeltaActivationsParityTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -67,7 +67,7 @@ class Phase15ActivationsParityTest < Minitest::Test
   end
 end
 
-class Phase15GatedDeltaParityTest < Minitest::Test
+class GatedDeltaActivationsParityGatedDeltaOpsScalarGatingMaskedMatchesPythonTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

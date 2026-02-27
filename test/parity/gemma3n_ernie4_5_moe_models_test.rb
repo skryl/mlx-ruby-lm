@@ -14,7 +14,7 @@ require_relative "../../lib/mlx_lm/models/ernie4_5"
 require_relative "../../lib/mlx_lm/models/gemma3n"
 require_relative "../../lib/mlx_lm/models/ernie4_5_moe"
 
-class Phase20DenseLaneRGemma3nTest < Minitest::Test
+class Gemma3NErnie45MoeModelsGemma3nTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -68,7 +68,7 @@ class Phase20DenseLaneRGemma3nTest < Minitest::Test
   end
 end
 
-class Phase20DenseLaneRErnie45MoeTest < Minitest::Test
+class Gemma3NErnie45MoeModelsErnie45MoeTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -134,7 +134,7 @@ class Phase20DenseLaneRErnie45MoeTest < Minitest::Test
   end
 end
 
-class Phase20DenseLaneRRegistryTest < Minitest::Test
+class Gemma3NErnie45MoeModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("gemma3n"), "gemma3n should be registered"
     assert MlxLm::Models::REGISTRY.key?("ernie4_5_moe"), "ernie4_5_moe should be registered"

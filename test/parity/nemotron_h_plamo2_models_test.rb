@@ -4,7 +4,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/nemotron_h"
 require_relative "../../lib/mlx_lm/models/plamo2"
 
-class Phase28HybridLaneATNemotronHTest < Minitest::Test
+class NemotronHPlamo2ModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -77,7 +77,7 @@ class Phase28HybridLaneATNemotronHTest < Minitest::Test
   end
 end
 
-class Phase28HybridLaneATPlamo2Test < Minitest::Test
+class NemotronHPlamo2ModelsPlamo2Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -156,7 +156,7 @@ class Phase28HybridLaneATPlamo2Test < Minitest::Test
   end
 end
 
-class Phase28HybridLaneATRegistryTest < Minitest::Test
+class NemotronHPlamo2ModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("nemotron_h"), "nemotron_h should be registered"
     assert MlxLm::Models::REGISTRY.key?("plamo2"), "plamo2 should be registered"

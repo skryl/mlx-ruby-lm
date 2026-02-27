@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/hunyuan"
 require_relative "../../lib/mlx_lm/models/gpt_oss"
 
-class Phase24DenseLaneAIHunyuanTest < Minitest::Test
+class HunyuanGptOssModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -88,7 +88,7 @@ class Phase24DenseLaneAIHunyuanTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAIGptOssTest < Minitest::Test
+class HunyuanGptOssModelsGptOssConstructForwardShapeSanitizeCleanupAndCacheMixTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -184,7 +184,7 @@ class Phase24DenseLaneAIGptOssTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAIRegistryTest < Minitest::Test
+class HunyuanGptOssModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("hunyuan"), "hunyuan should be registered"
     assert MlxLm::Models::REGISTRY.key?("gpt_oss"), "gpt_oss should be registered"

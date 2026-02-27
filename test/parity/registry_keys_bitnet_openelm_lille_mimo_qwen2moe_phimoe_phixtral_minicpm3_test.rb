@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase21IntegrationRegistryTest < Minitest::Test
+class RegistryKeysBitnetOpenelmLilleMimoQwen2MoePhimoePhixtralMinicpm3Test < Minitest::Test
   MODEL_TYPES = %w[
     bitnet
     openelm

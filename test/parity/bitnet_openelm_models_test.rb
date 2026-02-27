@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/bitnet"
 require_relative "../../lib/mlx_lm/models/openelm"
 
-class Phase21DenseLaneUBitnetTest < Minitest::Test
+class BitnetOpenelmModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -54,7 +54,7 @@ class Phase21DenseLaneUBitnetTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneUOpenELMTest < Minitest::Test
+class BitnetOpenelmModelsOpenelmConstructForwardShapeTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -86,7 +86,7 @@ class Phase21DenseLaneUOpenELMTest < Minitest::Test
   end
 end
 
-class Phase21DenseLaneURegistryTest < Minitest::Test
+class BitnetOpenelmModelsModelsRegisteredAndResolvableTest < Minitest::Test
   def test_models_registered_and_resolvable
     assert MlxLm::Models::REGISTRY.key?("bitnet"), "bitnet should be registered"
     assert MlxLm::Models::REGISTRY.key?("openelm"), "openelm should be registered"

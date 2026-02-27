@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/qwen3"
 require_relative "../../lib/mlx_lm/models/lfm2"
 require_relative "../../lib/mlx_lm/models/lfm2_vl"
 
-class Phase22DenseLaneABLfm2Test < Minitest::Test
+class Lfm2Lfm2VlModelsLfm2Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -62,7 +62,7 @@ class Phase22DenseLaneABLfm2Test < Minitest::Test
   end
 end
 
-class Phase22DenseLaneABLfm2VlTest < Minitest::Test
+class Lfm2Lfm2VlModelsLfm2VlTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -114,7 +114,7 @@ class Phase22DenseLaneABLfm2VlTest < Minitest::Test
   end
 end
 
-class Phase22DenseLaneABRegistryTest < Minitest::Test
+class Lfm2Lfm2VlModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("lfm2"), "lfm2 should be registered"
     assert MlxLm::Models::REGISTRY.key?("lfm2-vl"), "lfm2-vl should be registered"

@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/olmo3"
 require_relative "../../lib/mlx_lm/models/gpt2"
 
-class Phase18DenseLaneIRegistryTest < Minitest::Test
+class Olmo3Gpt2ModelsTest < Minitest::Test
   def test_registry_entries_for_lane_i_models
     assert MlxLm::Models::REGISTRY.key?("olmo3"), "olmo3 should be registered"
     assert MlxLm::Models::REGISTRY.key?("gpt2"), "gpt2 should be registered"
@@ -27,7 +27,7 @@ class Phase18DenseLaneIRegistryTest < Minitest::Test
   end
 end
 
-class Phase18DenseLaneIOLMo3Test < Minitest::Test
+class Olmo3Gpt2ModelsMo3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -64,7 +64,7 @@ class Phase18DenseLaneIOLMo3Test < Minitest::Test
   end
 end
 
-class Phase18DenseLaneIGPT2Test < Minitest::Test
+class Olmo3Gpt2ModelsT2Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end

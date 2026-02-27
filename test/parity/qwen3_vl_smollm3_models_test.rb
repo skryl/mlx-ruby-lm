@@ -14,7 +14,7 @@ require_relative "../../lib/mlx_lm/models/llama"
 require_relative "../../lib/mlx_lm/models/qwen3_vl"
 require_relative "../../lib/mlx_lm/models/smollm3"
 
-class Phase19DenseLaneNQwen3VLTest < Minitest::Test
+class Qwen3VlSmollm3ModelsQwen3VLTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -62,7 +62,7 @@ class Phase19DenseLaneNQwen3VLTest < Minitest::Test
   end
 end
 
-class Phase19DenseLaneNSmolLM3Test < Minitest::Test
+class Qwen3VlSmollm3ModelsM3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -97,7 +97,7 @@ class Phase19DenseLaneNSmolLM3Test < Minitest::Test
   end
 end
 
-class Phase19DenseLaneNRegistryTest < Minitest::Test
+class Qwen3VlSmollm3ModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("qwen3_vl"), "qwen3_vl should be registered"
     assert MlxLm::Models::REGISTRY.key?("smollm3"), "smollm3 should be registered"

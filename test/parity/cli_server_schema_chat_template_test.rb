@@ -1,9 +1,8 @@
 require_relative "../test_helper"
 
-# Phase 10: CLI & OpenAI-Compatible Server
 # Tests CLI parsing, server request/response schemas, and chat templates.
 
-class Phase10CLIParsingTest < Minitest::Test
+class CliServerSchemaChatTemplateTest < Minitest::Test
   # Test 1: CLI generate command parses all standard flags
   def test_cli_generate_flags
     args = MlxLm::CLI.parse_args([
@@ -69,7 +68,7 @@ class Phase10CLIParsingTest < Minitest::Test
   end
 end
 
-class Phase10ServerSchemaTest < Minitest::Test
+class CliServerSchemaChatTemplateChatCompletionRequestParsingTest < Minitest::Test
   # Test 6: Chat completion request schema parsed correctly
   def test_chat_completion_request_parsing
     request_body = {
@@ -165,7 +164,7 @@ class Phase10ServerSchemaTest < Minitest::Test
   end
 end
 
-class Phase10ChatTemplateTest < Minitest::Test
+class CliServerSchemaChatTemplateDefaultChatTemplateTest < Minitest::Test
   # Test 11: Default chat template formats messages correctly
   def test_default_chat_template
     messages = [

@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/exaone_moe"
 require_relative "../../lib/mlx_lm/models/glm4_moe"
 
-class Phase24DenseLaneALExaoneMoeTest < Minitest::Test
+class ExaoneMoeGlm4MoeModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -75,7 +75,7 @@ class Phase24DenseLaneALExaoneMoeTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneALGlm4MoeTest < Minitest::Test
+class ExaoneMoeGlm4MoeModelsGlm4MoeTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -136,7 +136,7 @@ class Phase24DenseLaneALGlm4MoeTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneALRegistryTest < Minitest::Test
+class ExaoneMoeGlm4MoeModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("exaone_moe"), "exaone_moe should be registered"
     assert MlxLm::Models::REGISTRY.key?("glm4_moe"), "glm4_moe should be registered"

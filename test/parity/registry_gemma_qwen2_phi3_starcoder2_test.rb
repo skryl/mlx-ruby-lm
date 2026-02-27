@@ -1,12 +1,11 @@
 require_relative "../test_helper"
 
-# Phase 6: Popular Model Architectures (Batch 1)
 # Tests that Gemma, Qwen2, Phi3, and Starcoder2 can be instantiated,
 # produce correct output shapes, and are registered in the model registry.
-class Phase6RegistryTest < Minitest::Test
+class RegistryGemmaQwen2Phi3Starcoder2Test < Minitest::Test
   include ParityTestHelpers
 
-  # Test 1: All Phase 6 models are registered
+  # Test 1: Core models are registered
   def test_all_models_registered
     %w[gemma qwen2 phi3 starcoder2].each do |name|
       assert MlxLm::Models::REGISTRY.key?(name), "#{name} should be registered"
@@ -35,7 +34,7 @@ class Phase6RegistryTest < Minitest::Test
   end
 end
 
-class Phase6GemmaTest < Minitest::Test
+class RegistryGemmaQwen2Phi3Starcoder2GemmaInstantiatesTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -78,7 +77,7 @@ class Phase6GemmaTest < Minitest::Test
   end
 end
 
-class Phase6Qwen2Test < Minitest::Test
+class RegistryGemmaQwen2Phi3Starcoder2Qwen2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -125,7 +124,7 @@ class Phase6Qwen2Test < Minitest::Test
   end
 end
 
-class Phase6Phi3Test < Minitest::Test
+class RegistryGemmaQwen2Phi3Starcoder2Phi3Test < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -158,7 +157,7 @@ class Phase6Phi3Test < Minitest::Test
   end
 end
 
-class Phase6Starcoder2Test < Minitest::Test
+class RegistryGemmaQwen2Phi3Starcoder2Starcoder2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup

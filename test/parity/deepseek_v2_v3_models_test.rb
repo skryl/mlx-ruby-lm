@@ -11,7 +11,7 @@ require_relative "../../lib/mlx_lm/models/deepseek"
 require_relative "../../lib/mlx_lm/models/deepseek_v2"
 require_relative "../../lib/mlx_lm/models/deepseek_v3"
 
-class Phase22DenseLaneYDeepseekV2Test < Minitest::Test
+class DeepseekV2V3ModelsV2Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -60,7 +60,7 @@ class Phase22DenseLaneYDeepseekV2Test < Minitest::Test
   end
 end
 
-class Phase22DenseLaneYDeepseekV3Test < Minitest::Test
+class DeepseekV2V3ModelsV3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -113,7 +113,7 @@ class Phase22DenseLaneYDeepseekV3Test < Minitest::Test
   end
 end
 
-class Phase22DenseLaneYRegistryTest < Minitest::Test
+class DeepseekV2V3ModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("deepseek_v2"), "deepseek_v2 should be registered"
     assert MlxLm::Models::REGISTRY.key?("deepseek_v3"), "deepseek_v3 should be registered"

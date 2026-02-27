@@ -14,7 +14,7 @@ require_relative "../../lib/mlx_lm/models/pipeline"
 require_relative "../../lib/mlx_lm/models/llama4"
 require_relative "../../lib/mlx_lm/models/ministral3"
 
-class Phase24DenseLaneAHLlama4Test < Minitest::Test
+class Llama4Ministral3ModelsLlama4Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -85,7 +85,7 @@ class Phase24DenseLaneAHLlama4Test < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAHMinistral3Test < Minitest::Test
+class Llama4Ministral3ModelsMinistral3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -142,7 +142,7 @@ class Phase24DenseLaneAHMinistral3Test < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAHRegistryTest < Minitest::Test
+class Llama4Ministral3ModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("llama4"), "llama4 should be registered"
     assert MlxLm::Models::REGISTRY.key?("ministral3"), "ministral3 should be registered"

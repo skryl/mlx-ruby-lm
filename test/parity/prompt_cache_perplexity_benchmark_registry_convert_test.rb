@@ -1,9 +1,8 @@
 require_relative "../test_helper"
 
-# Phase 12: Advanced Features & Polish
 # Tests prompt caching, perplexity, benchmarking, and model conversion utilities.
 
-class Phase12PromptCacheTest < Minitest::Test
+class PromptCachePerplexityBenchmarkRegistryConvertTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -71,7 +70,7 @@ class Phase12PromptCacheTest < Minitest::Test
   end
 end
 
-class Phase12PerplexityTest < Minitest::Test
+class PromptCachePerplexityBenchmarkRegistryConvertPerplexityComputationTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -121,7 +120,7 @@ class Phase12PerplexityTest < Minitest::Test
   end
 end
 
-class Phase12BenchmarkTest < Minitest::Test
+class PromptCachePerplexityBenchmarkRegistryConvertBenchmarkMeasuresTpsTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -170,7 +169,7 @@ class Phase12BenchmarkTest < Minitest::Test
   end
 end
 
-class Phase12ModelRegistryTest < Minitest::Test
+class PromptCachePerplexityBenchmarkRegistryConvertAllModelsRegisteredTest < Minitest::Test
   # Test 7: All implemented models are registered
   def test_all_models_registered
     expected = %w[llama gemma qwen2 phi3 starcoder2 stablelm cohere gemma2
@@ -195,7 +194,7 @@ class Phase12ModelRegistryTest < Minitest::Test
   end
 end
 
-class Phase12ConvertUtilsTest < Minitest::Test
+class PromptCachePerplexityBenchmarkRegistryConvertWeightDtypeConversionTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

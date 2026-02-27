@@ -9,7 +9,7 @@ require_relative "../../lib/mlx_lm/models"
 require_relative "../../lib/mlx_lm/models/hunyuan_v1_dense"
 require_relative "../../lib/mlx_lm/models/dbrx"
 
-class Phase23DenseLaneAEHunyuanV1DenseTest < Minitest::Test
+class HunyuanV1DenseDbrxModelsV1DenseTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -55,7 +55,7 @@ class Phase23DenseLaneAEHunyuanV1DenseTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneAEDbrxTest < Minitest::Test
+class HunyuanV1DenseDbrxModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -112,7 +112,7 @@ class Phase23DenseLaneAEDbrxTest < Minitest::Test
   end
 end
 
-class Phase23DenseLaneAERegistryTest < Minitest::Test
+class HunyuanV1DenseDbrxModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("hunyuan_v1_dense"), "hunyuan_v1_dense should be registered"
     assert MlxLm::Models::REGISTRY.key?("dbrx"), "dbrx should be registered"

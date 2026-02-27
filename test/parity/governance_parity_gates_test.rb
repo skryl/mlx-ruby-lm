@@ -4,7 +4,7 @@ require_relative "../test_helper"
 require "open3"
 require_relative "../../tasks/parity_inventory_task"
 
-class Phase13GovernanceGatesTest < Minitest::Test
+class GovernanceParityGatesTest < Minitest::Test
   MLX_ONNX_SUBMODULE_DIR = File.expand_path("../../mlx-ruby/submodules/mlx-onnx", __dir__)
   REQUIRED_MLX_ONNX_MIN_SHA = "33d4b2eed2aa342f0836298dda60b6c5eb011b0f"
   PARITY_CHECKLIST_PATH = File.expand_path("../../prd/2026_02_25_python_ruby_parity_checklist.md", __dir__)

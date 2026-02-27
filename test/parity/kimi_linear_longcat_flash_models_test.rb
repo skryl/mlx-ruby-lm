@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/kimi_linear"
 require_relative "../../lib/mlx_lm/models/longcat_flash"
 
-class Phase44DenseLaneARKimiLinearTest < Minitest::Test
+class KimiLinearLongcatFlashModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -82,7 +82,7 @@ class Phase44DenseLaneARKimiLinearTest < Minitest::Test
   end
 end
 
-class Phase44DenseLaneARLongcatFlashTest < Minitest::Test
+class KimiLinearLongcatFlashModelsLongcatFlashWrapperFromDictForwardShapeAndSanitizeMappingAndStackingTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -160,7 +160,7 @@ class Phase44DenseLaneARLongcatFlashTest < Minitest::Test
   end
 end
 
-class Phase44DenseLaneARRegistryTest < Minitest::Test
+class KimiLinearLongcatFlashModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("kimi_linear"), "kimi_linear should be registered"
     assert MlxLm::Models::REGISTRY.key?("longcat_flash"), "longcat_flash should be registered"

@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require "pathname"
 require "tmpdir"
 
-class PhaseGMissingUtilityModulesTest < Minitest::Test
+class MissingUtilityModulesTest < Minitest::Test
   include ParityTestHelpers
 
   class IdentityModule < MLX::NN::Module

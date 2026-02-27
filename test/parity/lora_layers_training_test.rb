@@ -1,8 +1,7 @@
 require_relative "../test_helper"
 
-# Phase 9: LoRA & Fine-Tuning
 # Tests LoRA layers, model application, training step, and adapter save/load.
-class Phase9LoRATest < Minitest::Test
+class LoraLayersTrainingTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

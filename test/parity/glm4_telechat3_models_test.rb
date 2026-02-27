@@ -11,7 +11,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/glm4"
 require_relative "../../lib/mlx_lm/models/telechat3"
 
-class Phase17DenseLaneFGLM4Test < Minitest::Test
+class Glm4Telechat3ModelsM4Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -49,7 +49,7 @@ class Phase17DenseLaneFGLM4Test < Minitest::Test
   end
 end
 
-class Phase17DenseLaneFTelechat3Test < Minitest::Test
+class Glm4Telechat3ModelsTelechat3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end

@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase19IntegrationRegistryTest < Minitest::Test
+class RegistryKeysPixtralQwenVlQwen35Mistral3SolarTest < Minitest::Test
   MODEL_TYPES = %w[
     pixtral
     qwen2_vl

@@ -2,7 +2,7 @@ require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/afmoe"
 require_relative "../../lib/mlx_lm/models/bailing_moe"
 
-class Phase26DenseLaneAKAfmoeTest < Minitest::Test
+class AfmoeBailingMoeModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -84,7 +84,7 @@ class Phase26DenseLaneAKAfmoeTest < Minitest::Test
   end
 end
 
-class Phase26DenseLaneAKBailingMoeTest < Minitest::Test
+class AfmoeBailingMoeModelsBailingMoeConstructForwardShapeAndSanitizeTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -157,7 +157,7 @@ class Phase26DenseLaneAKBailingMoeTest < Minitest::Test
   end
 end
 
-class Phase26DenseLaneAKRegistryTest < Minitest::Test
+class AfmoeBailingMoeModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("afmoe"), "afmoe should be registered"
     assert MlxLm::Models::REGISTRY.key?("bailing_moe"), "bailing_moe should be registered"

@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/deepseek"
 require_relative "../../lib/mlx_lm/models/kimi_k25"
 require_relative "../../lib/mlx_lm/models/kimi_vl"
 
-class Phase22DenseLaneAAKimiK25Test < Minitest::Test
+class KimiK25KimiVlModelsK25Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -63,7 +63,7 @@ class Phase22DenseLaneAAKimiK25Test < Minitest::Test
   end
 end
 
-class Phase22DenseLaneAAKimiVLTest < Minitest::Test
+class KimiK25KimiVlModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -110,7 +110,7 @@ class Phase22DenseLaneAAKimiVLTest < Minitest::Test
   end
 end
 
-class Phase22DenseLaneAARegistryTest < Minitest::Test
+class KimiK25KimiVlModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("kimi_k25"), "kimi_k25 should be registered"
     assert MlxLm::Models::REGISTRY.key?("kimi_vl"), "kimi_vl should be registered"

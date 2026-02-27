@@ -11,7 +11,7 @@ require_relative "../../lib/mlx_lm/models/activations"
 require_relative "../../lib/mlx_lm/models/cohere2"
 require_relative "../../lib/mlx_lm/models/internlm3"
 
-class Phase17DenseLaneECohere2Test < Minitest::Test
+class Cohere2Internlm3ModelsCohere2Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -51,7 +51,7 @@ class Phase17DenseLaneECohere2Test < Minitest::Test
   end
 end
 
-class Phase17DenseLaneEInternLM3Test < Minitest::Test
+class Cohere2Internlm3ModelsM3Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end

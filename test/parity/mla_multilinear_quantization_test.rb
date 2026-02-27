@@ -1,7 +1,7 @@
 require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/mla"
 
-class Phase14MLATest < Minitest::Test
+class MlaMultilinearQuantizationTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

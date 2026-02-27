@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase22IntegrationRegistryTest < Minitest::Test
+class RegistryKeysDeepseekGlmMoeKimiLfm2Test < Minitest::Test
   MODEL_TYPES = %w[
     deepseek_v2
     deepseek_v3

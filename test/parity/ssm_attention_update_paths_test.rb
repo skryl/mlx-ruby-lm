@@ -3,7 +3,7 @@
 require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/ssm"
 
-class Phase15SsmTest < Minitest::Test
+class SsmAttentionUpdatePathsTest < Minitest::Test
   def test_compute_dt_applies_softplus_and_clip
     mx = MLX::Core
 

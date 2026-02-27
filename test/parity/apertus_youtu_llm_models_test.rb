@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/apertus"
 require_relative "../../lib/mlx_lm/models/youtu_llm"
 
-class Phase18DenseLaneKApertusTest < Minitest::Test
+class ApertusYoutuLlmModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -53,7 +53,7 @@ class Phase18DenseLaneKApertusTest < Minitest::Test
   end
 end
 
-class Phase18DenseLaneKYoutuLLMTest < Minitest::Test
+class ApertusYoutuLlmModelsYoutuLlmConstructForwardShapeAndRegistryResolutionTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end

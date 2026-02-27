@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/ernie4_5"
 require_relative "../../lib/mlx_lm/models/baichuan_m1"
 
-class Phase18DenseLaneLErnie45Test < Minitest::Test
+class Ernie45BaichuanM1ModelsErnie45Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -45,7 +45,7 @@ class Phase18DenseLaneLErnie45Test < Minitest::Test
   end
 end
 
-class Phase18DenseLaneLBaichuanM1Test < Minitest::Test
+class Ernie45BaichuanM1ModelsM1Test < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -88,7 +88,7 @@ class Phase18DenseLaneLBaichuanM1Test < Minitest::Test
   end
 end
 
-class Phase18DenseLaneLRegistryTest < Minitest::Test
+class Ernie45BaichuanM1ModelsTest < Minitest::Test
   def test_models_registered
     assert MlxLm::Models::REGISTRY.key?("ernie4_5"), "ernie4_5 should be registered"
     assert MlxLm::Models::REGISTRY.key?("baichuan_m1"), "baichuan_m1 should be registered"

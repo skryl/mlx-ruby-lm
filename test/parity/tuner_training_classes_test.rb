@@ -1,6 +1,6 @@
 require_relative "../test_helper"
 
-class PhaseHTunerMissingClassesTest < Minitest::Test
+class TunerTrainingClassesTest < Minitest::Test
   include ParityTestHelpers
 
   class FakeTokenizer

@@ -1,8 +1,7 @@
 require_relative "../test_helper"
 require "set"
 
-# Phase 5: Model Loading Pipeline & Model Registry
-class Phase5RegistryTest < Minitest::Test
+class RegistryModelLoadingTokenizerTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -85,7 +84,7 @@ class Phase5RegistryTest < Minitest::Test
   end
 end
 
-class Phase5ModelLoadingTest < Minitest::Test
+class RegistryModelLoadingTokenizerLoadModelTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -209,7 +208,7 @@ class Phase5ModelLoadingTest < Minitest::Test
   end
 end
 
-class Phase5TokenizerLoadingTest < Minitest::Test
+class RegistryModelLoadingTokenizerTokenizerWrapperFromPathTest < Minitest::Test
   include ParityTestHelpers
 
   # Test 11: TokenizerWrapper from path has eos_token_ids

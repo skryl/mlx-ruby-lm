@@ -1,9 +1,9 @@
 require_relative "../test_helper"
 
-class PhaseIClassParityClosureSurfaceTest < Minitest::Test
+class ClassParityClosureSurfaceTest < Minitest::Test
   CHECKLIST_PATH = File.expand_path("../../prd/2026_02_25_python_ruby_parity_checklist.md", __dir__)
 
-  def test_core_runtime_phase_d_classes_exist
+  def test_core_runtime_classes_exist
     %i[
       GenerationResponse
       BatchStats
@@ -23,7 +23,7 @@ class PhaseIClassParityClosureSurfaceTest < Minitest::Test
     end
   end
 
-  def test_server_phase_e_classes_exist
+  def test_server_surface_classes_exist
     %i[
       StopCondition
       LRUPromptCache

@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/rope_utils"
 require_relative "../../lib/mlx_lm/models/minimax"
 require_relative "../../lib/mlx_lm/models/nemotron_nas"
 
-class Phase22DenseLaneAMMinimaxTest < Minitest::Test
+class MinimaxNemotronNasModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -73,7 +73,7 @@ class Phase22DenseLaneAMMinimaxTest < Minitest::Test
   end
 end
 
-class Phase22DenseLaneAMNemotronNasTest < Minitest::Test
+class MinimaxNemotronNasModelsNemotronNasConstructForwardShapeSanitizeAndCacheTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -138,7 +138,7 @@ class Phase22DenseLaneAMNemotronNasTest < Minitest::Test
   end
 end
 
-class Phase22DenseLaneAMRegistryTest < Minitest::Test
+class MinimaxNemotronNasModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("minimax"), "minimax should be registered"
     assert MlxLm::Models::REGISTRY.key?("nemotron-nas"), "nemotron-nas should be registered"

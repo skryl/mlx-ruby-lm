@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/granitemoe"
 require_relative "../../lib/mlx_lm/models/olmo2"
 require_relative "../../lib/mlx_lm/models/olmoe"
 
-class Phase20DenseLaneTGraniteMoeTest < Minitest::Test
+class GranitemoeOlmoeModelsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -69,7 +69,7 @@ class Phase20DenseLaneTGraniteMoeTest < Minitest::Test
   end
 end
 
-class Phase20DenseLaneTOLMoETest < Minitest::Test
+class GranitemoeOlmoeModelsOlmoeConstructForwardShapeAndSanitizeStacksExpertWeightsTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -127,7 +127,7 @@ class Phase20DenseLaneTOLMoETest < Minitest::Test
   end
 end
 
-class Phase20DenseLaneTRegistryTest < Minitest::Test
+class GranitemoeOlmoeModelsModelsRegisteredAndResolveTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("granitemoe"), "granitemoe should be registered"
     assert MlxLm::Models::REGISTRY.key?("olmoe"), "olmoe should be registered"

@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class Phase28IntegrationRegistryTest < Minitest::Test
+class RegistryKeysLongcatFlashNgramNemotronHPlamo2Qwen3NextRwkv7Test < Minitest::Test
   MODEL_TYPES = %w[
     longcat_flash_ngram
     nemotron_h

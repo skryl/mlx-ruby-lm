@@ -1,8 +1,7 @@
 require_relative "../test_helper"
 
-# Phase 8: Model Architectures (Batch 2)
 # Tests StableLM, Cohere, and Gemma2 architectures.
-class Phase8ArchBatch2Test < Minitest::Test
+class StablelmCohereGemma2Batch2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup

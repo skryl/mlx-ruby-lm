@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/switch_layers"
 require_relative "../../lib/mlx_lm/models/mimo_v2_flash"
 require_relative "../../lib/mlx_lm/models/lfm2_moe"
 
-class Phase24DenseLaneAJMimoV2FlashTest < Minitest::Test
+class MimoV2FlashLfm2MoeModelsV2FlashTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -99,7 +99,7 @@ class Phase24DenseLaneAJMimoV2FlashTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAJLfm2MoeTest < Minitest::Test
+class MimoV2FlashLfm2MoeModelsLfm2MoeTest < Minitest::Test
   def setup
     @mx = MLX::Core
   end
@@ -207,7 +207,7 @@ class Phase24DenseLaneAJLfm2MoeTest < Minitest::Test
   end
 end
 
-class Phase24DenseLaneAJRegistryTest < Minitest::Test
+class MimoV2FlashLfm2MoeModelsTest < Minitest::Test
   def test_models_registered_and_resolve
     assert MlxLm::Models::REGISTRY.key?("mimo_v2_flash"), "mimo_v2_flash should be registered"
     assert MlxLm::Models::REGISTRY.key?("lfm2_moe"), "lfm2_moe should be registered"

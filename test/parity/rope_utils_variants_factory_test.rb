@@ -6,7 +6,7 @@ require "json"
 require_relative "../test_helper"
 require_relative "../../lib/mlx_lm/models/rope_utils"
 
-class Phase14SuScaledRoPETest < Minitest::Test
+class RopeUtilsVariantsFactoryTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -61,7 +61,7 @@ class Phase14SuScaledRoPETest < Minitest::Test
   end
 end
 
-class Phase14Llama3RoPETest < Minitest::Test
+class RopeUtilsVariantsFactoryLlama3RoPETest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -126,7 +126,7 @@ class Phase14Llama3RoPETest < Minitest::Test
   end
 end
 
-class Phase14YarnRoPETest < Minitest::Test
+class RopeUtilsVariantsFactoryYarnRopeMatchesPythonTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -189,7 +189,7 @@ class Phase14YarnRoPETest < Minitest::Test
   end
 end
 
-class Phase14RoPEFactoryTest < Minitest::Test
+class RopeUtilsVariantsFactoryInitializeRopeDefaultAndLinearTest < Minitest::Test
   def test_initialize_rope_default_and_linear
     default_rope = MlxLm::Models.initialize_rope(8, 10_000.0, false)
     assert_instance_of MLX::NN::RoPE, default_rope
