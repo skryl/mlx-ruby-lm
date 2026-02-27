@@ -1,7 +1,7 @@
 require_relative "../test_helper"
 require "set"
 
-class RegistryModelLoadingTokenizerTest < Minitest::Test
+class ModelLoadingTokenizerTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -84,7 +84,7 @@ class RegistryModelLoadingTokenizerTest < Minitest::Test
   end
 end
 
-class RegistryModelLoadingTokenizerLoadModelTest < Minitest::Test
+class ModelLoadingTokenizerLoadModelTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -208,7 +208,7 @@ class RegistryModelLoadingTokenizerLoadModelTest < Minitest::Test
   end
 end
 
-class RegistryModelLoadingTokenizerTokenizerWrapperFromPathTest < Minitest::Test
+class ModelLoadingTokenizerTokenizerWrapperFromPathTest < Minitest::Test
   include ParityTestHelpers
 
   # Test 11: TokenizerWrapper from path has eos_token_ids

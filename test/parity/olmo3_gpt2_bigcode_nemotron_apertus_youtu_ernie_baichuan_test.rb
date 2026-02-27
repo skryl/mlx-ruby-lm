@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class RegistryKeysOlmo3Gpt2BigcodeNemotronApertusYoutuErnieBaichuanTest < Minitest::Test
+class Olmo3Gpt2BigcodeNemotronApertusYoutuErnieBaichuanTest < Minitest::Test
   MODEL_TYPES = %w[olmo3 gpt2 gpt_bigcode nemotron apertus youtu_llm ernie4_5 baichuan_m1].freeze
 
   def test_phase18_model_keys_resolve_with_tiny_configs

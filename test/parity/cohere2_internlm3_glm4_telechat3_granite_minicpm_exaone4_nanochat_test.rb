@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class RegistryKeysCohere2Internlm3Glm4Telechat3GraniteMinicpmExaone4NanochatTest < Minitest::Test
+class Cohere2Internlm3Glm4Telechat3GraniteMinicpmExaone4NanochatTest < Minitest::Test
   MODEL_TYPES = %w[cohere2 internlm3 glm4 telechat3 granite minicpm exaone4 nanochat].freeze
 
   def test_phase17_model_keys_resolve_with_tiny_configs

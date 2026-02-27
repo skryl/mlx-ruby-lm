@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class RegistryKeysAfmoeBailingMoeExaoneMoeGlm4MoeMinimaxNemotronNasRecurrentGemmaStep3P5Test < Minitest::Test
+class AfmoeBailingMoeExaoneMoeGlm4MoeMinimaxNemotronNasRecurrentGemmaStep3P5Test < Minitest::Test
   MODEL_TYPES = %w[
     afmoe
     bailing_moe

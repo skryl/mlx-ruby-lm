@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class RegistryKeysQwenPhiGlmOlmoSeedOssTest < Minitest::Test
+class QwenPhiGlmOlmoSeedOssTest < Minitest::Test
   MODEL_TYPES = %w[qwen3 qwen phi exaone glm helium olmo seed_oss].freeze
 
   def test_dense_model_keys_resolve_with_tiny_configs

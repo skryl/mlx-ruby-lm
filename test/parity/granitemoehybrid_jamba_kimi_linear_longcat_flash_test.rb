@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class RegistryKeysGranitemoehybridJambaKimiLinearLongcatFlashTest < Minitest::Test
+class GranitemoehybridJambaKimiLinearLongcatFlashTest < Minitest::Test
   MODEL_TYPES = %w[
     granitemoehybrid
     jamba

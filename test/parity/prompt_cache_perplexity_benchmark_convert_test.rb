@@ -2,7 +2,7 @@ require_relative "../test_helper"
 
 # Tests prompt caching, perplexity, benchmarking, and model conversion utilities.
 
-class PromptCachePerplexityBenchmarkRegistryConvertTest < Minitest::Test
+class PromptCachePerplexityBenchmarkConvertTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -70,7 +70,7 @@ class PromptCachePerplexityBenchmarkRegistryConvertTest < Minitest::Test
   end
 end
 
-class PromptCachePerplexityBenchmarkRegistryConvertPerplexityComputationTest < Minitest::Test
+class PromptCachePerplexityBenchmarkConvertPerplexityComputationTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -120,7 +120,7 @@ class PromptCachePerplexityBenchmarkRegistryConvertPerplexityComputationTest < M
   end
 end
 
-class PromptCachePerplexityBenchmarkRegistryConvertBenchmarkMeasuresTpsTest < Minitest::Test
+class PromptCachePerplexityBenchmarkConvertBenchmarkMeasuresTpsTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -169,7 +169,7 @@ class PromptCachePerplexityBenchmarkRegistryConvertBenchmarkMeasuresTpsTest < Mi
   end
 end
 
-class PromptCachePerplexityBenchmarkRegistryConvertAllModelsRegisteredTest < Minitest::Test
+class PromptCachePerplexityBenchmarkConvertAllModelsRegisteredTest < Minitest::Test
   # Test 7: All implemented models are registered
   def test_all_models_registered
     expected = %w[llama gemma qwen2 phi3 starcoder2 stablelm cohere gemma2
@@ -188,13 +188,13 @@ class PromptCachePerplexityBenchmarkRegistryConvertAllModelsRegisteredTest < Min
   end
 
   # Test 9: Registry count covers all architectures
-  def test_registry_count
+  def test_registration_count
     assert MlxLm::Models::REGISTRY.size >= 13,
       "Should have at least 13 registered architectures, got #{MlxLm::Models::REGISTRY.size}"
   end
 end
 
-class PromptCachePerplexityBenchmarkRegistryConvertWeightDtypeConversionTest < Minitest::Test
+class PromptCachePerplexityBenchmarkConvertWeightDtypeConversionTest < Minitest::Test
   include ParityTestHelpers
 
   def setup

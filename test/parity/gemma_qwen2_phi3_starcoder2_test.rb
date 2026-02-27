@@ -2,7 +2,7 @@ require_relative "../test_helper"
 
 # Tests that Gemma, Qwen2, Phi3, and Starcoder2 can be instantiated,
 # produce correct output shapes, and are registered in the model registry.
-class RegistryGemmaQwen2Phi3Starcoder2Test < Minitest::Test
+class GemmaQwen2Phi3Starcoder2Test < Minitest::Test
   include ParityTestHelpers
 
   # Test 1: Core models are registered
@@ -34,7 +34,7 @@ class RegistryGemmaQwen2Phi3Starcoder2Test < Minitest::Test
   end
 end
 
-class RegistryGemmaQwen2Phi3Starcoder2GemmaInstantiatesTest < Minitest::Test
+class GemmaQwen2Phi3Starcoder2GemmaInstantiatesTest < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -77,7 +77,7 @@ class RegistryGemmaQwen2Phi3Starcoder2GemmaInstantiatesTest < Minitest::Test
   end
 end
 
-class RegistryGemmaQwen2Phi3Starcoder2Qwen2Test < Minitest::Test
+class GemmaQwen2Phi3Starcoder2Qwen2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -124,7 +124,7 @@ class RegistryGemmaQwen2Phi3Starcoder2Qwen2Test < Minitest::Test
   end
 end
 
-class RegistryGemmaQwen2Phi3Starcoder2Phi3Test < Minitest::Test
+class GemmaQwen2Phi3Starcoder2Phi3Test < Minitest::Test
   include ParityTestHelpers
 
   def setup
@@ -157,7 +157,7 @@ class RegistryGemmaQwen2Phi3Starcoder2Phi3Test < Minitest::Test
   end
 end
 
-class RegistryGemmaQwen2Phi3Starcoder2Starcoder2Test < Minitest::Test
+class GemmaQwen2Phi3Starcoder2Starcoder2Test < Minitest::Test
   include ParityTestHelpers
 
   def setup

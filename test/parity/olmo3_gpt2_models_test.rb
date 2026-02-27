@@ -13,7 +13,7 @@ require_relative "../../lib/mlx_lm/models/olmo3"
 require_relative "../../lib/mlx_lm/models/gpt2"
 
 class Olmo3Gpt2ModelsTest < Minitest::Test
-  def test_registry_entries_for_lane_i_models
+  def test_registration_entries_for_lane_i_models
     assert MlxLm::Models::REGISTRY.key?("olmo3"), "olmo3 should be registered"
     assert MlxLm::Models::REGISTRY.key?("gpt2"), "gpt2 should be registered"
 

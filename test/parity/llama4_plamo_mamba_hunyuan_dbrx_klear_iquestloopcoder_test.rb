@@ -2,7 +2,7 @@
 
 require_relative "../test_helper"
 
-class RegistryKeysLlama4PlamoMambaHunyuanDbrxKlearIquestloopcoderTest < Minitest::Test
+class Llama4PlamoMambaHunyuanDbrxKlearIquestloopcoderTest < Minitest::Test
   MODEL_TYPES = %w[
     llama4_text
     plamo

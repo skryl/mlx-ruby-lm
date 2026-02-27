@@ -16,7 +16,7 @@ class Glm4Telechat3ModelsM4Test < Minitest::Test
     @mx = MLX::Core
   end
 
-  def test_glm4_construct_forward_shape_and_registry_resolution
+  def test_glm4_construct_forward_shape_and_registration_resolution
     args = MlxLm::Models::GLM4::ModelArgs.from_dict({
       "model_type" => "glm4",
       "hidden_size" => 64,
@@ -54,7 +54,7 @@ class Glm4Telechat3ModelsTelechat3Test < Minitest::Test
     @mx = MLX::Core
   end
 
-  def test_telechat3_construct_forward_shape_and_registry_resolution
+  def test_telechat3_construct_forward_shape_and_registration_resolution
     args = MlxLm::Models::Telechat3::ModelArgs.from_dict({
       "model_type" => "telechat3",
       "hidden_size" => 64,

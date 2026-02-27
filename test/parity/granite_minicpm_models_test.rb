@@ -12,7 +12,7 @@ require_relative "../../lib/mlx_lm/models/granite"
 require_relative "../../lib/mlx_lm/models/minicpm"
 
 class GraniteMinicpmModelsTest < Minitest::Test
-  def test_registry_entries_for_lane_g_models
+  def test_registration_entries_for_lane_g_models
     assert MlxLm::Models::REGISTRY.key?("granite"), "granite should be registered"
     assert MlxLm::Models::REGISTRY.key?("minicpm"), "minicpm should be registered"
 
