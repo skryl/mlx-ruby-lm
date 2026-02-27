@@ -26,6 +26,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install Linux native dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libopenblas-dev liblapack-dev gfortran
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
