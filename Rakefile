@@ -1,3 +1,5 @@
+require "fileutils"
+require "rbconfig"
 require "rake/testtask"
 require_relative "tasks/onnx_report_task"
 require_relative "tasks/parity_inventory_task"
@@ -7,6 +9,10 @@ VENV_PYTHON = File.join(VENV_DIR, "bin", "python")
 REQUIREMENTS_FILE = File.expand_path("requirements.txt", __dir__)
 TEST_DEVICE_CHOICES = %w[cpu gpu].freeze
 DEFAULT_TEST_DEVICES = %w[cpu gpu].freeze
+GEMSPEC_FILE = File.expand_path("mlx-ruby-lm.gemspec", __dir__)
+GEM_VERSION_FILE = File.expand_path("lib/mlx_lm/version.rb", __dir__)
+TEST_GEM_HOME = File.expand_path("tmp/gem_home", __dir__)
+TEST_GEM_SCRIPT = File.expand_path("tmp/gem_version_smoke_test.rb", __dir__)
 
 def parse_test_devices(args)
   raw_values = []
@@ -99,6 +105,63 @@ namespace :test do
       end
     end
   end
+
+  desc "Build gem, install into tmp/gem_home, and print installed gem version"
+  task :gem do
+    spec = Gem::Specification.load(GEMSPEC_FILE)
+    raise "Could not load gemspec: #{GEMSPEC_FILE}" unless spec
+
+    Rake::Task["gem:build"].invoke
+
+    gem_file = File.expand_path("#{spec.name}-#{spec.version}.gem", __dir__)
+    raise "Built gem artifact not found: #{gem_file}" unless File.exist?(gem_file)
+
+    FileUtils.rm_rf(TEST_GEM_HOME)
+    FileUtils.mkdir_p(TEST_GEM_HOME)
+    FileUtils.mkdir_p(File.dirname(TEST_GEM_SCRIPT))
+
+    smoke_script = <<~RUBY
+      require "rubygems"
+      gem_spec = Gem::Specification.find_by_name("mlx-ruby-lm")
+      version_file = File.join(gem_spec.full_gem_path, "lib", "mlx_lm", "version.rb")
+      load version_file
+      puts MlxLm::VERSION
+    RUBY
+    File.write(TEST_GEM_SCRIPT, smoke_script)
+
+    gem_env = {
+      "GEM_HOME" => TEST_GEM_HOME,
+      "GEM_PATH" => TEST_GEM_HOME,
+      "RUBYOPT" => nil,
+      "BUNDLE_BIN_PATH" => nil,
+      "BUNDLE_GEMFILE" => nil,
+      "BUNDLE_PATH" => nil,
+      "BUNDLE_WITH" => nil,
+      "BUNDLE_WITHOUT" => nil,
+      "RUBYGEMS_GEMDEPS" => nil,
+    }
+
+    run_smoke_test = proc do
+      sh(
+        gem_env,
+        "gem", "install", gem_file,
+        "--install-dir", TEST_GEM_HOME,
+        "--local",
+        "--ignore-dependencies",
+        "--no-document"
+      )
+
+      sh(gem_env, RbConfig.ruby, TEST_GEM_SCRIPT)
+    end
+
+    if defined?(Bundler) && Bundler.respond_to?(:with_unbundled_env)
+      Bundler.with_unbundled_env { run_smoke_test.call }
+    else
+      run_smoke_test.call
+    end
+  ensure
+    FileUtils.rm_f(TEST_GEM_SCRIPT)
+  end
 end
 
 namespace :parity do
@@ -119,6 +182,47 @@ namespace :onnx do
   desc "Run compat-only ONNX suite and generate report artifacts under test/reports"
   task :report do
     OnnxReportTask.run!
+  end
+end
+
+namespace :gem do
+  desc "Bump gem version by 0.0.0.1 in lib/mlx_lm/version.rb."
+  task :bump do
+    content = File.read(GEM_VERSION_FILE)
+    version_pattern = /^(\s*VERSION\s*=\s*")([^"]+)(")\s*$/
+    match = content.match(version_pattern)
+    raise "Could not find VERSION assignment in #{GEM_VERSION_FILE}" unless match
+
+    old_version = match[2]
+    segments = old_version.split(".")
+    unless segments.all? { |segment| segment.match?(/\A\d+\z/) } && segments.length <= 4
+      raise "Expected VERSION in numeric dotted format with up to 4 segments, got #{old_version.inspect}"
+    end
+
+    numeric_segments = segments.map(&:to_i)
+    numeric_segments << 0 while numeric_segments.length < 4
+    numeric_segments[3] += 1
+    new_version = numeric_segments.join(".")
+
+    updated = content.sub(version_pattern) { "#{Regexp.last_match(1)}#{new_version}#{Regexp.last_match(3)}" }
+    File.write(GEM_VERSION_FILE, updated)
+    puts "Bumped version: #{old_version} -> #{new_version}"
+  end
+
+  desc "Build gem package from mlx-ruby-lm.gemspec."
+  task :build do
+    sh("gem", "build", GEMSPEC_FILE)
+  end
+
+  desc "Publish built gem package to RubyGems."
+  task push: :build do
+    spec = Gem::Specification.load(GEMSPEC_FILE)
+    raise "Could not load gemspec: #{GEMSPEC_FILE}" unless spec
+
+    gem_file = File.expand_path("#{spec.name}-#{spec.version}.gem", __dir__)
+    raise "Built gem artifact not found: #{gem_file}" unless File.exist?(gem_file)
+
+    sh("gem", "push", gem_file)
   end
 end
 

@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = ["rut216@gmail.com"]
   s.homepage    = "https://github.com/skryl/mlx-ruby-lm"
   s.license     = "MIT"
-  s.required_ruby_version = ">= 3.1"
+  s.required_ruby_version = ">= 3.4"
 
   s.metadata = {
     "homepage_uri" => s.homepage,
