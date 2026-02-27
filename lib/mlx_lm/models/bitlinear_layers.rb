@@ -68,9 +68,9 @@ module MlxLm
     module_function
 
     def bitnet_quantize(model, quantization_config = {})
-      modules_to_not_convert = Array(config_value(quantization_config, "modules_to_not_convert", []))
+      modules_to_not_convert = Array(bitlinear_config_value(quantization_config, "modules_to_not_convert", []))
                                .map(&:to_s)
-      invert_weight_scales = config_value(quantization_config, "linear_class", "").to_s != "autobitlinear"
+      invert_weight_scales = bitlinear_config_value(quantization_config, "linear_class", "").to_s != "autobitlinear"
 
       replacements = []
       leaves = model.leaf_modules
@@ -97,12 +97,12 @@ module MlxLm
       model
     end
 
-    def config_value(config, key, default = nil)
+    def bitlinear_config_value(config, key, default = nil)
       return default if config.nil?
       return config[key] if config.key?(key)
 
       config.fetch(key.to_sym, default)
     end
-    private_class_method :config_value
+    private_class_method :bitlinear_config_value
   end
 end

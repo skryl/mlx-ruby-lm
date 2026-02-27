@@ -175,15 +175,12 @@ module MlxLm
 
       Enumerator.new do |yielder|
         n = 0
-        last_token = nil
         token_generator.each do |token, logprobs|
           if n == 0
             prompt_time = Process.clock_gettime(Process::CLOCK_MONOTONIC) - tic
             prompt_tps = prompt.size.to_f / [prompt_time, 1e-9].max
             tic = Process.clock_gettime(Process::CLOCK_MONOTONIC)
           end
-
-          last_token = token
 
           if tokenizer.eos_token_ids.include?(token)
             detokenizer.finalize

@@ -229,15 +229,15 @@ module MlxLm
       max_position_embeddings: nil
     )
       rope_type = if scaling_config
-        config_value(scaling_config, "type") ||
-          config_value(scaling_config, "rope_type", "default")
+        rope_config_value(scaling_config, "type") ||
+          rope_config_value(scaling_config, "rope_type", "default")
       else
         "default"
       end
 
       case rope_type
       when "default", "linear"
-        scale = rope_type == "linear" ? 1.0 / config_value(scaling_config, "factor") : 1.0
+        scale = rope_type == "linear" ? 1.0 / rope_config_value(scaling_config, "factor") : 1.0
         MLX::NN::RoPE.new(dims, traditional: traditional, base: base, scale: scale)
       when "llama3"
         Llama3RoPE.new(
@@ -256,7 +256,7 @@ module MlxLm
           mscale
           mscale_all_dim
         ].each do |key|
-          value = config_value(scaling_config, key)
+          value = rope_config_value(scaling_config, key)
           rope_kwargs[key.to_sym] = value unless value.nil?
         end
 
@@ -264,7 +264,7 @@ module MlxLm
           dims,
           max_position_embeddings: max_position_embeddings,
           traditional: traditional,
-          scaling_factor: config_value(scaling_config, "factor"),
+          scaling_factor: rope_config_value(scaling_config, "factor"),
           base: base,
           **rope_kwargs
         )
@@ -273,15 +273,15 @@ module MlxLm
           dims,
           base: base,
           max_position_embeddings: max_position_embeddings,
-          original_max_position_embeddings: config_value(
+          original_max_position_embeddings: rope_config_value(
             scaling_config,
             "original_max_position_embeddings"
           ),
-          short_factor: config_value(scaling_config, "short_factor"),
-          long_factor: config_value(scaling_config, "long_factor")
+          short_factor: rope_config_value(scaling_config, "short_factor"),
+          long_factor: rope_config_value(scaling_config, "long_factor")
         )
       when "mrope"
-        mrope_section = config_value(scaling_config, "mrope_section", [])
+        mrope_section = rope_config_value(scaling_config, "mrope_section", [])
         unless mrope_section.length == 3
           raise ArgumentError,
             "MRoPE currently only supports 3 sections, got #{mrope_section.length}."
@@ -293,13 +293,13 @@ module MlxLm
       end
     end
 
-    def config_value(config, key, default = nil)
+    def rope_config_value(config, key, default = nil)
       return default if config.nil?
       return config[key] if config.key?(key)
 
       config.fetch(key.to_sym, default)
     end
-    private_class_method :config_value
+    private_class_method :rope_config_value
 
     module RoPEUtils
       SuScaledRoPE = MlxLm::Models::SuScaledRoPE

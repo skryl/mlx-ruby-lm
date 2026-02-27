@@ -104,7 +104,6 @@ module MlxLm
         end
 
         def call(x, mask: nil, cache: nil)
-          mx = MLX::Core
           b, l, _d = x.shape
 
           queries = q_proj.call(x)

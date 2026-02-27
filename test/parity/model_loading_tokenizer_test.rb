@@ -27,7 +27,7 @@ class ModelLoadingTokenizerTest < Minitest::Test
   # Test 3: get_classes resolves 'mistral' via remapping to llama
   def test_get_classes_mistral_remap
     config = { "model_type" => "mistral" }
-    model_class, args_class = MlxLm::Models.get_classes(config)
+    model_class, _args_class = MlxLm::Models.get_classes(config)
     assert_equal MlxLm::Models::Llama::Model, model_class
   end
 

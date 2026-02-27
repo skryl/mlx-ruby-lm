@@ -142,7 +142,7 @@ class LoraLayersTrainingTest < Minitest::Test
     })
 
     x = @mx.ones([1, 4]).astype(@mx.float32)
-    loss, grads = loss_fn.call(lora, x)
+    loss, _grads = loss_fn.call(lora, x)
     @mx.eval(loss)
     assert loss.item.is_a?(Numeric), "Loss should be a number"
   end

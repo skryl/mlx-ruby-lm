@@ -108,7 +108,6 @@ module MlxLm
         end
 
         def call(inputs, cache: nil)
-          mx = MLX::Core
           h = embed_tokens.call(inputs)
           # Gemma scales embeddings by sqrt(hidden_size)
           h = h * Math.sqrt(@args.hidden_size)

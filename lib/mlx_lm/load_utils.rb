@@ -10,7 +10,7 @@ module MlxLm
     # @param tokenizer_config [Hash] Additional tokenizer config overrides
     # @return [Array(nn::Module, TokenizerWrapper)] The loaded model and tokenizer
     def load(model_path, tokenizer_config: nil)
-      model, config = load_model(model_path)
+      model, _config = load_model(model_path)
       tokenizer = load_tokenizer(model_path)
       [model, tokenizer]
     end
