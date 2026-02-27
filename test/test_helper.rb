@@ -18,7 +18,14 @@ module ParityTestHelpers
 
   # Run a Python snippet, capture JSON output, return parsed result
   def python_eval(code)
-    stdout, stderr, status = Open3.capture3("python3", "-c", code)
+    stdout, stderr, status = Open3.capture3(
+      {
+        # Linux mlx Python can fail JIT C++ compilation in CI toolchains.
+        # Parity checks do not require compiled mode.
+        "MLX_DISABLE_COMPILE" => "1",
+      },
+      "python3", "-c", code
+    )
     unless status.success?
       raise <<~MSG
         Python eval failed (exit #{status.exitstatus})
